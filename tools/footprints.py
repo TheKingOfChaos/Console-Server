@@ -61,7 +61,13 @@ def vendor():
                 return m.group(0)
             shutil.copy(os.path.join(VENDOR3D, step), OUT3D)
             return '(model "${KIPRJMOD}/lib/console_server.3dshapes/' + step + '"'
-        open(path, 'w').write(re.sub(r'\(model "([^"]+)"', repl, text))
+        text = re.sub(r'\(model "([^"]+)"', repl, text)
+        # no vendor model (the RJ45 block): use our own envelope model from tools/rj45_model.py
+        if '(model ' not in text and os.path.exists(os.path.join(OUT3D, name + '.step')):
+            text = text.rstrip()[:-1] + ('\t(model "${KIPRJMOD}/lib/console_server.3dshapes/' + name + '.step"\n'
+                                         '\t\t(offset (xyz 0 0 0))\n\t\t(scale (xyz 1 1 1))\n'
+                                         '\t\t(rotate (xyz 0 0 0))\n\t)\n)\n')
+        open(path, 'w').write(text)
 
 
 def mounting_slot():

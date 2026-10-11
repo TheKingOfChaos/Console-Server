@@ -2110,6 +2110,17 @@
 			(uuid "c7960498-c4d1-4dce-8490-4da1b9bb9059")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/console_server.3dshapes/RJ45_HC-RJ45-059D-2x8.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "Resistor_SMD:R_0603_1608Metric"
 		(layer "F.Cu")
@@ -15491,7 +15502,7 @@
 			(uuid "51ee84ec-27cd-429a-9204-c97a0c77d79c")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Inductor_SMD.3dshapes/L_Bourns_SRP7028A_7.3x6.6mm.step"
+		(model "${KIPRJMOD}/lib/console_server.3dshapes/IND-SMD_L7.1-W6.6-H2.8.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -40761,7 +40772,7 @@
 			(uuid "a901c4a9-21cd-47b0-9b0e-58f659e05be1")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/HTSOP-8-1EP_3.9x4.9mm_Pitch1.27mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/HSOP-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.1mm.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -61395,15 +61406,15 @@
 			(uuid "6b7ba35d-a290-41af-8db4-912976dc42f9")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+		(model "${KIPRJMOD}/lib/console_server.3dshapes/USB-C_SMD-TYPE-C-31-M-12.step"
 			(offset
-				(xyz 0 0 0)
+				(xyz 0 1.39 0)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 180)
 			)
 		)
 	)
@@ -69182,7 +69193,7 @@
 			(uuid "22adb2be-bfcc-4ec4-ad00-57a0c09acd43")
 		)
 		(embedded_fonts no)
-		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/HTSOP-8-1EP_3.9x4.9mm_Pitch1.27mm.step"
+		(model "${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/TI_SO-PowerPAD-8.step"
 			(offset
 				(xyz 0 0 0)
 			)

@@ -1808,4 +1808,9 @@
 		(uuid "9c83eadc-4a4b-4ecc-9268-464350c400a8")
 	)
 	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/console_server.3dshapes/RJ45_HC-RJ45-059D-2x8.step"
+		(offset (xyz 0 0 0))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
+	)
 )

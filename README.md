@@ -141,6 +141,16 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
 - **Buck loops:** both are compact pours, but check the input-cap / switch / diode loop of each buck against the TPS54x60 layout guide.
 - **Autorouted traces:** the routing is generated, so expect some odd detours. Re-run DRC after any hand edit.
 
+## 3D model
+
+- `3d/usb-console-server.step`: the whole board with every part (16 MB), for enclosure design in any CAD tool. `3d/preview.png` is a quick render.
+- Rebuild it in KiCad (File > Export > STEP) or with `kicad-cli pcb export step --subst-models usb-console-server.kicad_pcb`; KiCad's standard 3D library must be installed.
+- Models that are not in KiCad's library are in `lib/console_server.3dshapes`:
+  - **J5, the 16-port RJ45 block, is a simplified envelope** (`tools/rj45_model.py`): no vendor model or drawing exists. The 115 × 28.2 mm outline and port positions match the footprint, but the **25.4 mm height is assumed** (typical for stacked 2×N RJ45). Measure a real part before finalising an enclosure.
+  - L2 (SRP7028A) and J1 (HRO TYPE-C-31-M-12 USB-C) use the EasyEDA models for their LCSC parts.
+  - `tools/fix_3d_models.py` points L2, J1, U8 and U9 at these files (KiCad 10 renamed or lacks the stock ones).
+- The Raspberry Pi is not in the model. It sits face-down on J2.
+
 ## Ordering from JLCPCB
 
 `python3 tools/jlc_export.py` writes `jlcpcb/`:
