@@ -1,0 +1,3044 @@
+(kicad_sch
+	(version 20260306)
+	(generator "eeschema")
+	(generator_version "10.0")
+	(uuid "8d9f1518-1774-5eec-b4af-2ec6180e5f61")
+	(paper "A3")
+	(title_block
+		(title "USB Console Server - top level")
+		(date "2026-10-10")
+		(rev "A")
+		(company "USB Console Server")
+		(comment 1 "48-port RS-232 console server, 16 ports per board")
+		(comment 2 "Generated from the design record by tools/design.py")
+	)
+	(lib_symbols
+		(symbol "Mechanical:MountingHole"
+			(pin_names
+				(offset 1.016)
+			)
+			(exclude_from_sim no)
+			(in_bom no)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "H"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "MountingHole"
+				(at 0 3.175 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Mounting Hole without connection"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "mounting hole"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "MountingHole*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "MountingHole_0_1"
+				(circle
+					(center 0 0)
+					(radius 1.27)
+					(stroke
+						(width 1.27)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "USB CONSOLE SERVER - 16 RS-232 console ports per board, three identical boards -> 48 ports on one Pi.\nBoard identity is two solder straps on the MCU sheet; nothing else differs between builds.\nSignal: USB-C -> USB2514B hub -> 4x FT4232H -> 8x MAX3232E -> 16x RJ45 (Cisco console, 3-wire).\nPower: 24 V cabinet bus -> fuse / reverse-block / TVS -> 5 V (Pi), 3.3 V (logic), LM317 3.3 V (MCU)."
+		(exclude_from_sim no)
+		(at 20 22 0)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+			(justify left top)
+		)
+		(uuid "b08da08e-b64f-5a46-8745-a1eb0e50fa5c")
+	)
+	(text "FT1..FT4: one FT4232H cluster per hub port. FT1 serves P01-P04 and sits at the port-01 end of the board.\nPorts are numbered by physical jack; udev symlinks and silkscreen use the same numbers."
+		(exclude_from_sim no)
+		(at 20 175 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "b132a2c7-2e58-544f-9089-028e126f96f6")
+	)
+	(text "H1-H4: slotted chassis mounts (the boards are located by the chassis, not the connectors).\nH5-H8: Raspberry Pi HAT pattern, 58 x 49 mm."
+		(exclude_from_sim no)
+		(at 30 255 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "cf8872db-f393-556b-add8-cb2446357180")
+	)
+	(wire
+		(pts
+			(xy 144.78 132.08) (xy 139.7 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "085c84ef-a40f-5267-9c49-46a1513e464c")
+	)
+	(wire
+		(pts
+			(xy 184.15 139.7) (xy 189.23 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0abc47ec-ca26-5d89-95e1-1023cb4a5a77")
+	)
+	(wire
+		(pts
+			(xy 354.33 132.08) (xy 359.41 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11c660c0-fe4f-5364-b07c-bf671e8c747c")
+	)
+	(wire
+		(pts
+			(xy 314.96 134.62) (xy 309.88 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15217af1-ad85-55f1-8aed-f0b536d61a38")
+	)
+	(wire
+		(pts
+			(xy 269.24 134.62) (xy 274.32 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1548ce5c-be3e-5db5-af47-b9171c7269a0")
+	)
+	(wire
+		(pts
+			(xy 269.24 137.16) (xy 274.32 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "15579356-4e3a-521c-a5f3-c1e62bcf2fa2")
+	)
+	(wire
+		(pts
+			(xy 99.06 137.16) (xy 104.14 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a2ec1d5-a7d9-52ce-b9ea-f3d55f2012f2")
+	)
+	(wire
+		(pts
+			(xy 144.78 134.62) (xy 139.7 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b4a2fe0-b8ae-57e6-a286-7801a822f6bc")
+	)
+	(wire
+		(pts
+			(xy 354.33 139.7) (xy 359.41 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b9c8bbf-143b-5d1b-b39f-558201270cfd")
+	)
+	(wire
+		(pts
+			(xy 184.15 137.16) (xy 189.23 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2deb6531-d590-5e7a-98bb-a56b75a3a0a6")
+	)
+	(wire
+		(pts
+			(xy 229.87 137.16) (xy 224.79 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "301773b4-42c7-579e-9650-8b3783f87839")
+	)
+	(wire
+		(pts
+			(xy 354.33 137.16) (xy 359.41 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "351598b5-8c4e-580e-8069-221e432861a5")
+	)
+	(wire
+		(pts
+			(xy 314.96 137.16) (xy 309.88 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "376d5852-3595-5285-8733-007dd02dcada")
+	)
+	(wire
+		(pts
+			(xy 184.15 144.78) (xy 189.23 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37b3990e-13c3-5f3a-9138-809087f6d00e")
+	)
+	(wire
+		(pts
+			(xy 59.69 132.08) (xy 54.61 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f270e1c-147c-5f42-aff7-36e0494728f7")
+	)
+	(wire
+		(pts
+			(xy 99.06 144.78) (xy 104.14 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "40cd5092-9e68-5a52-b108-04f79d96b1f6")
+	)
+	(wire
+		(pts
+			(xy 99.06 142.24) (xy 104.14 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5250e52d-fd1a-56ec-bd19-954447a832e9")
+	)
+	(wire
+		(pts
+			(xy 59.69 137.16) (xy 54.61 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "54c23ab7-a118-5d3e-a3b6-f6de55ecd605")
+	)
+	(wire
+		(pts
+			(xy 269.24 142.24) (xy 274.32 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5675af2c-261e-51c9-b926-c0e1129ee3dd")
+	)
+	(wire
+		(pts
+			(xy 354.33 144.78) (xy 359.41 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5749c280-e8e5-5e87-a3b3-71c50c214c29")
+	)
+	(wire
+		(pts
+			(xy 184.15 147.32) (xy 189.23 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58bbca1e-a4d0-5d9b-afb4-4a868c6c8a17")
+	)
+	(wire
+		(pts
+			(xy 99.06 149.86) (xy 104.14 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5cfc1b10-c61a-52fe-8ca4-9c55d0e5180d")
+	)
+	(wire
+		(pts
+			(xy 269.24 149.86) (xy 274.32 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f73d37d-b1b8-522d-a192-39e8b3ec16ab")
+	)
+	(wire
+		(pts
+			(xy 269.24 147.32) (xy 274.32 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "627dd016-3160-5fa7-864e-af06da262b30")
+	)
+	(wire
+		(pts
+			(xy 184.15 134.62) (xy 189.23 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ad8ca4c-8251-526b-aa99-0af57dcef8d1")
+	)
+	(wire
+		(pts
+			(xy 269.24 132.08) (xy 274.32 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70211304-6769-5d57-911a-addcba8c5e45")
+	)
+	(wire
+		(pts
+			(xy 354.33 147.32) (xy 359.41 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "748a9f23-0bc0-5648-b261-0099ee544b22")
+	)
+	(wire
+		(pts
+			(xy 99.06 139.7) (xy 104.14 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "75aab6d1-c702-5061-88fe-5b0abfd293ec")
+	)
+	(wire
+		(pts
+			(xy 229.87 134.62) (xy 224.79 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "876a18cf-4245-5ae3-9a48-1a6edad7cef5")
+	)
+	(wire
+		(pts
+			(xy 184.15 132.08) (xy 189.23 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8cc2c811-c2de-54c7-8b03-89c9caf7f8df")
+	)
+	(wire
+		(pts
+			(xy 314.96 132.08) (xy 309.88 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "930a5692-daa2-5a4e-be1d-ef63a4b1c61e")
+	)
+	(wire
+		(pts
+			(xy 99.06 134.62) (xy 104.14 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9b400df9-3cfc-5a12-bc2c-dd52ae230159")
+	)
+	(wire
+		(pts
+			(xy 269.24 139.7) (xy 274.32 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9e93ff1d-8877-56fb-bd2e-44ef28602bc8")
+	)
+	(wire
+		(pts
+			(xy 184.15 149.86) (xy 189.23 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9fb6c958-b1ad-5f64-9521-690a6a06af44")
+	)
+	(wire
+		(pts
+			(xy 144.78 137.16) (xy 139.7 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac2f52b5-3bf4-51df-94a3-3043e7cc6846")
+	)
+	(wire
+		(pts
+			(xy 354.33 149.86) (xy 359.41 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "adfacda5-51ab-560b-9efa-de8ef6ac05b3")
+	)
+	(wire
+		(pts
+			(xy 354.33 134.62) (xy 359.41 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b3ef7ab9-8a53-5db3-b8c1-0d3444374622")
+	)
+	(wire
+		(pts
+			(xy 354.33 142.24) (xy 359.41 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bfe23aa8-7b43-57f3-9e0f-5bcd98aa9ea5")
+	)
+	(wire
+		(pts
+			(xy 59.69 134.62) (xy 54.61 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "da488b81-d6c6-51f2-9ef8-e15443c3941f")
+	)
+	(wire
+		(pts
+			(xy 99.06 147.32) (xy 104.14 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3b16812-b7a3-5f40-b95e-0065a42fd23b")
+	)
+	(wire
+		(pts
+			(xy 99.06 132.08) (xy 104.14 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6a1fcd2-8e2b-5df4-9a84-13cdb0719892")
+	)
+	(wire
+		(pts
+			(xy 184.15 142.24) (xy 189.23 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f992d699-cb06-598c-8e0d-8be193da2b76")
+	)
+	(wire
+		(pts
+			(xy 269.24 144.78) (xy 274.32 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc2785fd-7fcd-5a9b-b44a-1dff0f5a3693")
+	)
+	(wire
+		(pts
+			(xy 229.87 132.08) (xy 224.79 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe8a89e4-c4f1-502b-8419-c437e99d6cd3")
+	)
+	(global_label "P13_TXD"
+		(shape output)
+		(at 359.41 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "02afb47c-9840-52cf-bcaa-427e87ecd431")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P14_RXD"
+		(shape input)
+		(at 359.41 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "03626c2c-5fcb-5558-abd8-97575f0b49e6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P06_TXD"
+		(shape output)
+		(at 189.23 137.16 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "0a41250b-1580-5a1d-9e2d-e637626f76e1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "FTDI_RST_N"
+		(shape input)
+		(at 54.61 137.16 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "0bf463d5-32d4-5597-ae6c-2e0fa6ce9cfb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 54.61 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P10_TXD"
+		(shape output)
+		(at 274.32 137.16 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "10db7d04-7f7b-525d-bf32-0ffbddc9fda5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "FTDI_RST_N"
+		(shape input)
+		(at 139.7 137.16 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "139554d8-88a3-5d2e-9945-0478ec68cd5c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P15_RXD"
+		(shape input)
+		(at 359.41 144.78 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "15ae6006-5038-572d-9809-107a9b0aa55c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P16_TXD"
+		(shape output)
+		(at 359.41 147.32 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1eabd12b-b897-5fa2-88ca-53aa0e0d6c71")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P02_TXD"
+		(shape output)
+		(at 104.14 137.16 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1f1b052e-87b0-576e-8d6e-496058734c73")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P08_RXD"
+		(shape input)
+		(at 189.23 149.86 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "1fb10a67-deb9-5d68-82f0-3c21921ab6e4")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P05_TXD"
+		(shape output)
+		(at 189.23 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "31750f8d-7a25-5df6-8156-c4bd75d4bce8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P02_RXD"
+		(shape input)
+		(at 104.14 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "38ddd4da-2e84-5945-9246-14636acad6a5")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P12_RXD"
+		(shape input)
+		(at 274.32 149.86 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "3d4ee2c6-1275-5737-9ee0-e2db3b38a0fe")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN3_DM"
+		(shape bidirectional)
+		(at 224.79 134.62 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "4194953f-e113-52b2-88ff-7986bb70f63c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 224.79 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P10_RXD"
+		(shape input)
+		(at 274.32 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "41ea3dfa-aa56-584e-99b1-30ee92274165")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN4_DP"
+		(shape bidirectional)
+		(at 309.88 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "43dee59d-842f-56e8-b54f-ebca9a494db9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 309.88 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN1_DM"
+		(shape bidirectional)
+		(at 54.61 134.62 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "46160ac1-dc45-54da-9391-192c03bde7d2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 54.61 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P09_TXD"
+		(shape output)
+		(at 274.32 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "51e89fa7-63f5-59e9-b0e8-b0f2406ad0f7")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P04_RXD"
+		(shape input)
+		(at 104.14 149.86 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "523d0455-4865-514d-8adc-75c82847fa61")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P07_TXD"
+		(shape output)
+		(at 189.23 142.24 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "5669c0a5-a38c-5e09-98af-1d6fa449f74b")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN4_DM"
+		(shape bidirectional)
+		(at 309.88 134.62 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5d64de52-4025-5b76-beb9-ab7dcfd13432")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 309.88 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P16_RXD"
+		(shape input)
+		(at 359.41 149.86 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "60beff3a-7752-5e52-b375-070eb8479666")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 149.86 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN2_DM"
+		(shape bidirectional)
+		(at 139.7 134.62 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "63566236-2aed-5680-872f-28da3cd3f028")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P14_TXD"
+		(shape output)
+		(at 359.41 137.16 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "6f8dc2fd-494a-59f8-abec-772ff2176c88")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P11_TXD"
+		(shape output)
+		(at 274.32 142.24 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "718bdc80-dcad-574d-9341-2d031f469abc")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P12_TXD"
+		(shape output)
+		(at 274.32 147.32 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "7625545e-4eeb-5a70-942c-10a8c6f46a52")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P09_RXD"
+		(shape input)
+		(at 274.32 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "964ddf1f-4ddd-50b6-901b-fc12ee17ffc1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P04_TXD"
+		(shape output)
+		(at 104.14 147.32 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9af1c795-254b-5959-9831-9389cfb5533a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P07_RXD"
+		(shape input)
+		(at 189.23 144.78 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "add76b7c-5f86-5b73-a12d-af9c75635fb6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN3_DP"
+		(shape bidirectional)
+		(at 224.79 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b6bb84b3-912f-53d2-acb4-7f2c04cd4753")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 224.79 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P06_RXD"
+		(shape input)
+		(at 189.23 139.7 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "b77a9730-2d2b-51b3-990a-908e5994491e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 139.7 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P15_TXD"
+		(shape output)
+		(at 359.41 142.24 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bad984ec-bdce-5112-bcf4-ca4322afce93")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P13_RXD"
+		(shape input)
+		(at 359.41 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bb68ba81-63bb-5f01-9827-e044373aed19")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 359.41 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P01_TXD"
+		(shape output)
+		(at 104.14 132.08 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "bd024bfb-3297-5033-9b4d-2a4a6fe579f1")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN1_DP"
+		(shape bidirectional)
+		(at 54.61 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c2f80f0a-febe-549d-a76a-f15336a35f7f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 54.61 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_DN2_DP"
+		(shape bidirectional)
+		(at 139.7 132.08 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c83a219c-40d4-55d0-ad34-052d3a4b5a21")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 139.7 132.08 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P08_TXD"
+		(shape output)
+		(at 189.23 147.32 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d007d22a-b14f-5b5c-be3c-d95ed7b3a7f2")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 147.32 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P11_RXD"
+		(shape input)
+		(at 274.32 144.78 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "d564ac45-08fe-5951-b43b-2326c0f9bd8a")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 274.32 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P03_RXD"
+		(shape input)
+		(at 104.14 144.78 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e17aa4cc-acd7-5f13-8979-4fc12a3069f6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P01_RXD"
+		(shape input)
+		(at 104.14 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "e302e99e-5f8d-5707-9538-c324f1b7b9a0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "FTDI_RST_N"
+		(shape input)
+		(at 224.79 137.16 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e5ddde59-c34d-5e68-91f0-93424167a4a0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 224.79 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "FTDI_RST_N"
+		(shape input)
+		(at 309.88 137.16 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "f087807c-518f-5bb4-9e0e-5e30546376ec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 309.88 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P03_TXD"
+		(shape output)
+		(at 104.14 142.24 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "f9c0b116-4131-5c3c-b300-074b86afee60")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 104.14 142.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "P05_RXD"
+		(shape input)
+		(at 189.23 134.62 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "fbc16f19-3309-5389-a1a4-93607f13a1be")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 189.23 134.62 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 114.3 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "0006d737-f315-530b-ab51-c560bad2128e")
+		(property "Reference" "H8"
+			(at 114.3 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M2.5 Pi"
+			(at 114.3 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5"
+			(at 114.3 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 114.3 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 114.3 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 30.48 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "3509266d-c039-5c4b-bb11-52d17a670408")
+		(property "Reference" "H1"
+			(at 30.48 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M3 slot"
+			(at 30.48 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "console_server:MountingSlot_3.2x6mm"
+			(at 30.48 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 30.48 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 90.17 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "74653587-7187-5d36-a958-cec3303df52e")
+		(property "Reference" "H6"
+			(at 90.17 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M2.5 Pi"
+			(at 90.17 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5"
+			(at 90.17 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 90.17 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 90.17 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 66.04 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8948abfd-91f2-54e6-ab04-f91a1fe766e5")
+		(property "Reference" "H4"
+			(at 66.04 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M3 slot"
+			(at 66.04 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "console_server:MountingSlot_3.2x6mm"
+			(at 66.04 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 66.04 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 66.04 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 77.47 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8a41604e-14ab-542b-923f-0ab64ecb3f16")
+		(property "Reference" "H5"
+			(at 77.47 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M2.5 Pi"
+			(at 77.47 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5"
+			(at 77.47 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 77.47 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 77.47 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 54.61 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a5f9b02f-0dda-5700-ad38-c5147c460280")
+		(property "Reference" "H3"
+			(at 54.61 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M3 slot"
+			(at 54.61 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "console_server:MountingSlot_3.2x6mm"
+			(at 54.61 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 54.61 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 54.61 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 101.6 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a88030e7-3ab3-538a-9ac7-16614265b460")
+		(property "Reference" "H7"
+			(at 101.6 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M2.5 Pi"
+			(at 101.6 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.7mm_M2.5"
+			(at 101.6 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 101.6 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 101.6 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 41.91 270.51 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b5b1b87a-05a8-5420-b1ed-1ee1db6db200")
+		(property "Reference" "H2"
+			(at 41.91 265.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "M3 slot"
+			(at 41.91 267.335 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "console_server:MountingSlot_3.2x6mm"
+			(at 41.91 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 41.91 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 41.91 270.51 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(reference "H2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 250.19 59.69)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0c9097a7-f937-5261-88d8-91dc8d9ff3fa")
+		(property "Sheetname" "Housekeeping MCU"
+			(at 250.19 58.9784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "mcu.kicad_sch"
+			(at 250.19 85.6746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 144.78 129.54)
+		(size 39.37 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "262bc92e-c8eb-5ddc-9fb3-5187e04d8e29")
+		(property "Sheetname" "FT2"
+			(at 144.78 128.8284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ftdi.kicad_sch"
+			(at 144.78 155.5246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 144.78 132.08 180)
+			(uuid "e3dcc566-01b9-57fb-86f0-fd72a3b32eff")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 144.78 134.62 180)
+			(uuid "530b10cc-37a4-5f10-bbb9-b310fa80e029")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "FTDI_RST_N" input
+			(at 144.78 137.16 180)
+			(uuid "8898a496-3495-52e3-aa10-d5bd3dece119")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TX232_A" output
+			(at 184.15 132.08 0)
+			(uuid "0bad1478-3dc9-582c-b66b-aba2b9946b0f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_A" input
+			(at 184.15 134.62 0)
+			(uuid "1e9bab73-d11a-525f-be0d-2c0b89211beb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_B" output
+			(at 184.15 137.16 0)
+			(uuid "437ec828-3886-51c3-8f41-55ef1892d278")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_B" input
+			(at 184.15 139.7 0)
+			(uuid "95ec7c2f-695b-5622-8f1d-349fcf5817a1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_C" output
+			(at 184.15 142.24 0)
+			(uuid "188fa4f7-dce8-5fc7-888a-d26a2abb8c7a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_C" input
+			(at 184.15 144.78 0)
+			(uuid "ca61cb40-59c4-5fd2-afe1-5a177bdf1e45")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_D" output
+			(at 184.15 147.32 0)
+			(uuid "7b31eeb5-5513-5b44-8c98-4d2384eefbb1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_D" input
+			(at 184.15 149.86 0)
+			(uuid "b5edd8e5-7cf3-5ef2-b3c8-b901b97f6217")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "8")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 59.69 129.54)
+		(size 39.37 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "37496822-0ed6-5ce0-a3b8-c2fa9be23285")
+		(property "Sheetname" "FT1"
+			(at 59.69 128.8284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ftdi.kicad_sch"
+			(at 59.69 155.5246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 59.69 132.08 180)
+			(uuid "1690b839-3ca1-5a1e-b572-9a738292ad4f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 59.69 134.62 180)
+			(uuid "cbb58f07-d1b1-5653-b264-94d320c8ea64")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "FTDI_RST_N" input
+			(at 59.69 137.16 180)
+			(uuid "a9765484-067e-56f8-a947-2dea62915952")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TX232_A" output
+			(at 99.06 132.08 0)
+			(uuid "b6e6c5e4-c8de-5af1-a4ec-cf87789be10e")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_A" input
+			(at 99.06 134.62 0)
+			(uuid "92a828e0-5d79-58de-ab0c-051bff344cc6")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_B" output
+			(at 99.06 137.16 0)
+			(uuid "4a7c67b3-4db9-50dd-9e1d-a5fde88f1adc")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_B" input
+			(at 99.06 139.7 0)
+			(uuid "95cc5ddc-6c2b-5dee-9495-93f56360cdb1")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_C" output
+			(at 99.06 142.24 0)
+			(uuid "19b8da6c-72b5-52be-a96c-b266cf660bb5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_C" input
+			(at 99.06 144.78 0)
+			(uuid "729a3eb2-a289-5476-9672-5242956bcd0d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_D" output
+			(at 99.06 147.32 0)
+			(uuid "e7222ad1-5b42-5e1c-9950-bcd3032ab4da")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_D" input
+			(at 99.06 149.86 0)
+			(uuid "b5ab7eae-0612-5e79-b44c-98b675c1372a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 320.04 59.69)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3c3c3fca-b20d-5d09-b070-17a803c2c21f")
+		(property "Sheetname" "Ports"
+			(at 320.04 58.9784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ports.kicad_sch"
+			(at 320.04 85.6746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "6")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 180.34 59.69)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "447a1b8f-2fdc-50b9-83aa-04992f76bce9")
+		(property "Sheetname" "USB hub"
+			(at 180.34 58.9784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "hub.kicad_sch"
+			(at 180.34 85.6746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 229.87 129.54)
+		(size 39.37 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "b5e6d068-c038-5418-855b-118e2d3e725f")
+		(property "Sheetname" "FT3"
+			(at 229.87 128.8284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ftdi.kicad_sch"
+			(at 229.87 155.5246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 229.87 132.08 180)
+			(uuid "967f612e-e2be-5cb2-8122-6bfca6f6ca33")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 229.87 134.62 180)
+			(uuid "68297e7f-5ca4-53e7-9daa-63aa7c57c993")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "FTDI_RST_N" input
+			(at 229.87 137.16 180)
+			(uuid "31633fc9-c95d-5e4a-a36d-8e922840d7f4")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TX232_A" output
+			(at 269.24 132.08 0)
+			(uuid "69bac302-6931-5c4d-9a5a-9d9bfd56d906")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_A" input
+			(at 269.24 134.62 0)
+			(uuid "a598bc62-2b9f-54a9-bfd6-0fdaf4709688")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_B" output
+			(at 269.24 137.16 0)
+			(uuid "1dba9650-ddcc-535a-ab1d-f0270a6fbe11")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_B" input
+			(at 269.24 139.7 0)
+			(uuid "6c128a17-7eee-55ec-a7a4-35f43ff35e48")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_C" output
+			(at 269.24 142.24 0)
+			(uuid "6e89e171-9ae8-594c-9c8e-947512a9e26f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_C" input
+			(at 269.24 144.78 0)
+			(uuid "1b31cb0a-5873-5c53-a9f5-439cf1f475aa")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_D" output
+			(at 269.24 147.32 0)
+			(uuid "e1ab1e21-adb9-5ced-ae0f-d900206f4a37")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_D" input
+			(at 269.24 149.86 0)
+			(uuid "3099dd90-33c2-5b5d-b768-49067adbd2ff")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 314.96 129.54)
+		(size 39.37 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "b81bb46e-a9a7-5d01-bee9-596f1580a63a")
+		(property "Sheetname" "FT4"
+			(at 314.96 128.8284 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ftdi.kicad_sch"
+			(at 314.96 155.5246 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(pin "USB_DP" bidirectional
+			(at 314.96 132.08 180)
+			(uuid "84209340-8ca8-5fe0-8764-573dff1bbf8b")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "USB_DM" bidirectional
+			(at 314.96 134.62 180)
+			(uuid "87a04a64-7da0-53ac-89a2-d4eb7aec9634")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "FTDI_RST_N" input
+			(at 314.96 137.16 180)
+			(uuid "de49e844-c7b3-5913-ac15-69c81cf7ed6a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "TX232_A" output
+			(at 354.33 132.08 0)
+			(uuid "a7d0ee46-aee3-58fa-9580-a25b9ac43187")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_A" input
+			(at 354.33 134.62 0)
+			(uuid "7a3f7d3e-e96a-579d-88c4-2c4734864cea")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_B" output
+			(at 354.33 137.16 0)
+			(uuid "2c657fa4-2bef-5b94-b154-bd0451b60d03")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_B" input
+			(at 354.33 139.7 0)
+			(uuid "480c73f1-8e1f-5b95-88c2-a243a42689eb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_C" output
+			(at 354.33 142.24 0)
+			(uuid "94b06b9e-7ee8-539b-a0a5-2e1e377faf23")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_C" input
+			(at 354.33 144.78 0)
+			(uuid "4875e411-275d-5bea-a666-3ad31e37cd65")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "TX232_D" output
+			(at 354.33 147.32 0)
+			(uuid "1d3a27e4-c621-5081-af79-217a576f95cd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "RX232_D" input
+			(at 354.33 149.86 0)
+			(uuid "71b19764-081a-54c7-b5fb-df6e4a8a506a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "10")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 39.37 59.69)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "de399430-edef-5614-8a45-b0f690a76711")
+		(property "Sheetname" "Power"
+			(at 39.37 58.9784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "power.kicad_sch"
+			(at 39.37 85.6746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 110.49 59.69)
+		(size 49.53 25.4)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "f3f52a01-333f-526f-9d49-668139dd696e")
+		(property "Sheetname" "Pi"
+			(at 110.49 58.9784 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pi.kicad_sch"
+			(at 110.49 85.6746 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "usb-console-server"
+				(path "/8d9f1518-1774-5eec-b4af-2ec6180e5f61"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

@@ -1,0 +1,9 @@
+Designator,Qty per board,LCSC Part #,Value,Description
+J5,1,C46261623,HC-RJ45-059D-2x8-2-04,"RJ45 2x8 block, 16 ports"
+J2,1,C2977589,RPi GPIO 2x20,"2x20 female socket, 2.54 mm (Pi GPIO, Pi mounts face-down on it)"
+J3,1,C492412,PWR_CHAIN,1x4 right-angle pin header (power chain in)
+J4,1,C2897386,PWR_CHAIN,1x4 right-angle socket (power chain out)
+J8,1,C492417,LINK,1x9 right-angle pin header (board link)
+J9,1,C2897391,LINK,1x9 right-angle socket (board link)
+J6,1,(any 1x03 2.54 mm header),PI_CONSOLE,"1x3 pin header 2.54 mm (Pi console, optional)"
+J7,1,(any 1x03 2.54 mm header),UPDI,"1x3 pin header 2.54 mm (UPDI programming, optional)"

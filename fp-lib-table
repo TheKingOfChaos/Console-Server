@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "console_server")(type "KiCad")(uri "${KIPRJMOD}/lib/console_server.pretty")(options "")(descr "USB console server project footprints"))
+)

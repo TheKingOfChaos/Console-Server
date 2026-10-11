@@ -1,0 +1,216 @@
+(footprint "SOT886_L1.5-W1.0-P0.50-LS1.00-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "SOT886_L1.5-W1.0-P0.50-LS1.00-BL (LCSC C478118, EasyEDA footprint via easyeda2kicad)")
+	(property "Reference" "REF**"
+		(at 0 -4.38 0)
+		(layer "F.SilkS")
+		(uuid "c3d0c3d1-0154-4b83-a1f6-22e7a856ca76")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SOT886_L1.5-W1.0-P0.50-LS1.00-BL"
+		(at 0 4.38 0)
+		(layer "F.Fab")
+		(uuid "54921000-a580-40cc-b450-ba9e350cde38")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c49e240f-96c6-4c50-b275-9075c253fc5c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "764f74a0-9842-4646-b3de-139e7b7dee3c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC Part" "C478118"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1e0a3861-6494-4712-ba7e-4be191f6532c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.95 0.5)
+		(end -0.95 -0.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "74ed9719-8d39-42c2-88cd-d7d323efd2e6")
+	)
+	(fp_line
+		(start 0.95 0.5)
+		(end 0.95 -0.5)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "72f9c1a4-efa5-4541-8f12-cc203949c6fe")
+	)
+	(fp_arc
+		(start -0.9 0.85)
+		(mid -0.9 0.85)
+		(end -0.9 0.85)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e8680709-821d-4880-bd76-a0983dba93df")
+	)
+	(fp_circle
+		(center -0.75 0.64)
+		(end -0.72 0.64)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "0162cc0f-5e96-4e50-abc8-07fd015e179d")
+	)
+	(fp_circle
+		(center -0.5 0.84)
+		(end -0.37 0.84)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "cf63bb6d-9b12-40f1-954d-8ef5fdbaf5ae")
+	)
+	(fp_line
+		(start -0.75 -0.5)
+		(end 0.75 -0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "00fc0fe5-3be5-46a3-a767-9d962954377b")
+	)
+	(fp_line
+		(start -0.75 0.5)
+		(end -0.75 -0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "64919e6a-98aa-485b-86f9-3764aa3215ff")
+	)
+	(fp_line
+		(start 0.75 -0.5)
+		(end 0.75 0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "c60817a9-7d9b-434c-afd9-97b2a1b243b6")
+	)
+	(fp_line
+		(start 0.75 0.5)
+		(end -0.75 0.5)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "54313100-9296-4700-bab1-c35827c0c034")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "a04f4197-0439-4caf-a8d6-ee7169708f18")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -0.5 0.38)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "3c66b5e4-5c17-4460-a5b0-d85c8d86024c")
+	)
+	(pad "2" smd rect
+		(at 0 0.38)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "4e7a740b-fe0a-4218-b4ee-773026dde9c1")
+	)
+	(pad "3" smd rect
+		(at 0.5 0.38)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "c406107b-2b0d-44af-aeb5-378fe7d0388a")
+	)
+	(pad "4" smd rect
+		(at 0.5 -0.38 180)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "130b95c8-4b40-40cc-9a23-90446a6255b6")
+	)
+	(pad "5" smd rect
+		(at 0 -0.38 180)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "660b4f5a-0de6-4b66-8a6b-e68480910b81")
+	)
+	(pad "6" smd rect
+		(at -0.5 -0.38 180)
+		(size 0.25 0.52)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "e77456f3-9181-42d6-95d8-f671e7d5a318")
+	)
+	(embedded_fonts no)
+	(model "${KIPRJMOD}/lib/console_server.3dshapes/SOT886_L1.5-W1.0-H0.5-P0.50-LS1.00-BL.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

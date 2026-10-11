@@ -1,0 +1,16 @@
+# routing scratch space (intermediate boards, Freerouting runs)
+route/
+# KiCad local/temporary files
+*.bak
+*.kicad_prl
+fp-info-cache
+*-backups/
+_autosave-*
+~*.lck
+\#auto_saved_files#
+# python
+__pycache__/
+# old board versions: git history keeps them now; only the last uncoupled-pairs board is kept
+backups/*
+!backups/usb-console-server_saved-edits_20261011-0957.kicad_pcb
+!backups/usb-console-server_saved-edits_20261011-0957.kicad_pro
