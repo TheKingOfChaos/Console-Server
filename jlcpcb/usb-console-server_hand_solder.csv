@@ -5,5 +5,5 @@ J3,1,C492412,PWR_CHAIN,1x4 right-angle pin header (power chain in)
 J4,1,C2897386,PWR_CHAIN,1x4 right-angle socket (power chain out)
 J8,1,C492417,LINK,1x9 right-angle pin header (board link)
 J9,1,C2897391,LINK,1x9 right-angle socket (board link)
-J6,1,(any 1x03 2.54 mm header),PI_CONSOLE,"1x3 pin header 2.54 mm (Pi console, optional)"
-J7,1,(any 1x03 2.54 mm header),UPDI,"1x3 pin header 2.54 mm (UPDI programming, optional)"
+J6,1,C49257,PI_CONSOLE,"1x3 pin header 2.54 mm (Pi console, optional)"
+J7,1,C49257,UPDI,"1x3 pin header 2.54 mm (UPDI programming, optional)"

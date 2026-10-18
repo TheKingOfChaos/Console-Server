@@ -161,7 +161,10 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
 | `usb-console-server_bom_jlc.csv` | assembly BOM: 61 lines, every one with an LCSC number (SMD only) |
 | `usb-console-server_cpl_jlc.csv` | pick-and-place: 271 parts, all on the top side |
 | `usb-console-server_hand_solder.csv` | not uploaded: the through-hole connectors you solder yourself, with LCSC numbers to buy them |
+| `usb-console-server_lcsc_order_3boards.csv` | LCSC BOM Tool upload: **every** part for a full set of 3 boards (to build them all yourself) |
+| `usb-console-server_lcsc_order_3boards_through_hole_only.csv` | LCSC BOM Tool upload: only the hand-soldered connectors, when JLCPCB assembles the SMD parts |
 
+- Other board counts: `python3 tools/lcsc_order.py <boards>`. LCSC rounds each line up to its minimum order quantity.
 - **Not assembled by JLC:** test points, mounting holes and DNP parts, and every through-hole connector (J2 Pi socket, J3/J4 power chain, J5 RJ45 block, J8/J9 link, J6/J7 debug headers). These are soldered by hand; see `usb-console-server_hand_solder.csv`.
 - **Check every part's rotation in JLC's placement preview.** KiCad and JLC disagree on the zero orientation of some packages (often SOT-223, SOT-23-6, SOIC, the LQFP/QFN ICs, diodes, electrolytics, crystals). Fix any that look wrong in their editor before paying.
 - Stock and "extended part" fees change daily; JLC flags missing parts when you upload the BOM.
