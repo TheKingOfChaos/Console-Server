@@ -132,7 +132,7 @@ r.C('4.7nF', 'COMP5_RC', 'GND')
 r.C('47pF', 'COMP5', 'GND')
 r.C('100nF', 'BOOT5', 'SW5')
 r.gap()
-r.L('10uH', 'SW5', '+5V', 'L:SRP1265A', 'console_server:L_Bourns_SRP1265A', extra={'MPN': 'SRP1265A-100M', 'Note': 'Isat 15.5 A, Irms 10 A'})
+r.L('10uH', 'SW5', '+5V', 'L:SRP1265A', 'console_server:L_Bourns_SRP1265A', extra={'MPN': 'TMPC1265HP-100MG-D', 'Note': 'Isat 15.5 A, Irms 10 A (SRP1265A-100M equivalent)'})
 pw.add('Device:D_Schottky', (r.x + 4, 215), 'D', 'B560C', {'1': 'SW5', '2': 'GND'}, rot=90, fp='Diode_SMD:D_SMC',
        fields=flds('D:B560C'))
 r.gap(2)
@@ -201,12 +201,12 @@ r.R('4.7k', 'PI3.3', 'PI_SDA', dnp=True, extra={'Note': 'DNP - Pi has 1.8k on bo
 r.R('4.7k', 'PI3.3', 'PI_SCL', dnp=True, extra={'Note': 'DNP - Pi has 1.8k on board'})
 
 # ideal diode
-pi.text('IDEAL DIODE: LM74700-Q1 + HYG032N03LR1C1 (30 V, 3.3 mOhm) blocks back-feed from the Pi\'s own USB-C.\n'
+pi.text('IDEAL DIODE: LM74700-Q1 + AON7524 (30 V, 3.3 mOhm) blocks back-feed from the Pi\'s own USB-C.\n'
         'C24 (VCAP) connects to ANODE per the LM74700 datasheet; rated >= 25 V. 100 nF = 2.3 ms turn-on delay.\n'
         'BRING-UP: 3.3 mOhm is below TI\'s 8-20 mOhm window - scope the gate with the Pi idling for hunting.', (170, 22))
-pi.add('console_server:HYG032N03LR1C1', (230, 60), 'Q1', 'HYG032N03LR1C1', {'1': '+5V', '4': 'Q1_GATE', '5': 'PI_5V'},
+pi.add('console_server:HYG032N03LR1C1', (230, 60), 'Q1', 'AON7524', {'1': '+5V', '4': 'Q1_GATE', '5': 'PI_5V'},
        rot=270, fields=flds('Q:HYG032'))
-pi.add('Power_Management:LM74700', (230, 90), 'U19', 'LM74700QDBVRQ1',
+pi.add('Power_Management:LM74700', (230, 90), 'U19', 'LM74700QDBVTQ1',
        {'1': 'LM_VCAP', '2': 'GND', '3': '+5V', '4': 'PI_5V', '5': 'Q1_GATE', '6': '+5V'}, fields=flds('U:LM74700'))
 r = Row(pi, 260, 85)
 r.C('100nF', 'LM_VCAP', '+5V', key='C:100nF50', ref='C24', extra={'Note': 'VCAP to ANODE, >=25 V'})

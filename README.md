@@ -29,7 +29,7 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
 1. **RJ45 quantity.** LCSC C46261623 is a single 2×8 ganged block with all 16 jacks (~115 mm wide), not a 2-jack block. The BOM has **1 per board**, not 8.
 2. **Buck converters** (the record leaves them open). **TPS54560B** (+5V, 5 A) and **TPS54360B** (+3.3V, 3.5 A): both 60 V-rated (above the 42.1 V TVS clamp), with Eco-mode pulse skipping, so they are stable unloaded on boards 2 and 3. Both run at 400 kHz, with EN left open (internal pull-up).
    **Compensation (16.9k / 4.7 nF / 47 pF) is a starting point. Re-derive it in TI WEBENCH** for the chosen L and Cout.
-   Inductors are Bourns SRP1265A-100M (5 V, Isat 15.5 A) and SRP7028A-100M (3.3 V, Isat 6 A). Output caps are 22 µF/25 V 1206 (a JLCPCB Basic part): 4 on +5V, 3 on +3.3V.
+   Inductors are TAI-TECH TMPC1265HP-100MG-D (5 V, Isat 15.5 A; SRP1265A-100M equivalent, same 13.5 × 12.5 mm body) and SRP7028A-100M (3.3 V, Isat 6 A). Output caps are 22 µF/25 V 1206 (a JLCPCB Basic part): 4 on +5V, 3 on +3.3V.
    The LMR33630 was rejected: its 36 V rating is below the clamp.
 3. **USB2514B CRFILT/PLLFILT.** The record says 0.01 µF + 0.1 µF. The datasheet asks for ≥1.0 µF low-ESR on each. **Fitted 1 µF + 100 nF. Confirm.**
 4. **LM74700 VCAP** goes to ANODE (one of the record's open items; resolved per the datasheet).

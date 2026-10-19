@@ -8794,7 +8794,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 351.79 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -9559,7 +9559,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 193.04 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -10530,7 +10530,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 172.72 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -11538,7 +11538,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 361.95 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -12648,7 +12648,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 182.88 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -13081,7 +13081,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C840531"
+		(property "LCSC" "C305223"
 			(at 111.76 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -13092,7 +13092,7 @@
 				)
 			)
 		)
-		(property "MPN" "SRP1265A-100M"
+		(property "MPN" "TMPC1265HP-100MG-D"
 			(at 111.76 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -15604,7 +15604,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23351"
+		(property "LCSC" "C403098"
 			(at 240.03 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -15705,7 +15705,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 372.11 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -16037,7 +16037,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23351"
+		(property "LCSC" "C403098"
 			(at 50.8 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -16523,7 +16523,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C23350"
+		(property "LCSC" "C114613"
 			(at 309.88 100.33 0)
 			(hide yes)
 			(show_name no)
@@ -16712,7 +16712,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12891"
+		(property "LCSC" "C77091"
 			(at 162.56 214.63 0)
 			(hide yes)
 			(show_name no)
@@ -16890,7 +16890,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C28323"
+		(property "LCSC" "C91185"
 			(at 299.72 100.33 0)
 			(hide yes)
 			(show_name no)

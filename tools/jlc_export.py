@@ -24,6 +24,15 @@ OUT = os.path.join(ROOT, 'jlcpcb')
 # soldered by hand: the through-hole connectors (Pi socket, power chain, RJ45 block, link)
 # and the 3-pin debug headers (Pi console, UPDI)
 HAND_SOLDER = {'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9'}
+# schematic LCSC number -> JLCPCB Basic part with the same spec. The schematic carries parts that LCSC
+# itself has in stock (Oct 2026); JLCPCB's own warehouse still stocks these Basic equivalents, which
+# avoids the per-type Extended-part fee at assembly.
+JLC_BASIC = {
+    'C111134': 'C25819',   # 47k 0603 1%
+    'C22548': 'C21190',    # 1k 0603 1%
+    'C91185': 'C28323',    # 1uF 50V X7R 0805
+    'C77091': 'C12891',    # 22uF 25V X5R 1206
+}
 LAYERS = 'F.Cu,In1.Cu,In2.Cu,B.Cu,F.Paste,B.Paste,F.Silkscreen,B.Silkscreen,F.Mask,B.Mask,Edge.Cuts'
 
 
@@ -77,7 +86,8 @@ def main():
 
     groups = {}
     for ref, (p, s) in fitted.items():
-        key = (s['LCSC'].strip(), s['Value'], s['Footprint'].split(':')[-1])
+        lc = s['LCSC'].strip()
+        key = (JLC_BASIC.get(lc, lc), s['Value'], s['Footprint'].split(':')[-1])
         groups.setdefault(key, []).append(ref)
 
     def refkey(r):
