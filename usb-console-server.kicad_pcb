@@ -62630,7 +62630,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C70590"
+		(property "LCSC" "C5444545"
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)

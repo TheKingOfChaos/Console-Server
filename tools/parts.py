@@ -5,7 +5,7 @@ otherwise confirmed against the JLCPCB catalogue (adom-jlcpcb, 2026-10-10).
 LCSC = {
     # --- from the design record
     'F:0468002': 'C187611', 'Q:IRFR5305': 'C2624', 'D:BZT52C15': 'C668893', 'D:SMAJ26A': 'C148225',
-    'U:LM317': 'C5296732', 'X:24M': 'C70590', 'U:FT4232HL': 'C56742', 'X:12M': 'C9002', 'U:93LC46B': 'C16253',
+    'U:LM317': 'C5296732', 'X:24M': 'C5444545', 'U:FT4232HL': 'C56742', 'X:12M': 'C9002', 'U:93LC46B': 'C16253',
     'U:MAX3232E': 'C193666', 'U:SP3232': 'C9378', 'J:RJ45x16': 'C46261623', 'U:LM74700': 'C2653623',
     'Q:HYG032': 'C431195', 'D:SMAJ6.0A': 'C223993',
     # --- ICs / discretes confirmed by search
@@ -16,7 +16,7 @@ LCSC = {
     'C:100uF63': 'C51953411', 'C:470uF10': 'C335982', 'C:220uF10': 'C72494',
     'J:2x20_skt': 'C2977589', 'J:1x09_hdr': 'C492417', 'J:1x09_skt': 'C2897391',
     'J:1x04_hdr': 'C492412', 'J:1x04_skt': 'C2897386',
-    'D:LED_G': 'C72043',
+    'D:LED_G': 'C12065',
     'J:1x03_hdr': 'C49257',
     # --- passives (basic unless noted)
     'C:100nF': 'C14663', 'C:100nF50': 'C14663', 'C:1uF': 'C29936', 'C:1uF50': 'C91185', 'C:10uF': 'C15850',

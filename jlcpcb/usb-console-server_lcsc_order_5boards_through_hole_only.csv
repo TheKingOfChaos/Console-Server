@@ -1,0 +1,8 @@
+LCSC Part Number,Quantity,Manufacturer Part,Value,Package,Designators
+C49257,10,,PI_CONSOLE,PinHeader_1x03_P2.54mm_Vertical,"J6,J7"
+C492412,5,,PWR_CHAIN,PinHeader_1x04_P2.54mm_Horizontal,J3
+C2897386,5,,PWR_CHAIN,PinSocket_1x04_P2.54mm_Horizontal,J4
+C46261623,5,,HC-RJ45-059D-2x8-2-04,RJ45_HC-RJ45-059D-2x8,J5
+C492417,5,,LINK,PinHeader_1x09_P2.54mm_Horizontal,J8
+C2897391,5,,LINK,PinSocket_1x09_P2.54mm_Horizontal,J9
+C2977589,2,,RPi GPIO 2x20,PinSocket_2x20_P2.54mm_Vertical,J2
