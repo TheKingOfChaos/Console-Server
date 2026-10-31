@@ -434,7 +434,7 @@ def power_copper(b):
         x2 = max(p['box'][2] for p in ps) + 1.0
         y2 = max(p['box'][3] for p in ps) + 1.0
         _poly_zone(b, pcbnew.In2_Cu, net, 'SEC_' + net.strip('/').replace('/', '_'),
-                   [(x1, y1), (x2, y1), (x2, y2), (x1, y2)], 1, solid=False, keep_stitching=True)
+                   [(x1, y1), (x2, y1), (x2, y2), (x1, y2)], 1, solid=True, keep_stitching=True)
         report.append(f'{net} section pour on In2')
     return report
 
