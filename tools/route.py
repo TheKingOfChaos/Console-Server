@@ -195,8 +195,9 @@ def _box_pts(boxes, grow):
 POUR_POLYS = []
 
 
-def _poly_zone(b, layer, net, name, poly, priority, clearance=0.3, solid=True):
-    POUR_POLYS.append(poly)
+def _poly_zone(b, layer, net, name, poly, priority, clearance=0.3, solid=True, keep_stitching=False):
+    if not keep_stitching:          # solid power pours: no GND stitching vias punched through them
+        POUR_POLYS.append(poly)
     for z in b.Zones():
         if z.GetZoneName() == name:
             return z
@@ -393,33 +394,48 @@ def power_copper(b):
         if ps:
             _poly_zone(b, pcbnew.F_Cu, net, f'{name}_F', _hull(_box_pts([p['box'] for p in ps], 0.6)), 10)
             report.append(f'{name} pour')
-    # buck inputs: +24V around each VIN pin
-    for ic in ('U8', 'U9'):
-        vin = next((p for p in by_net.get('+24V', []) if p['ref'] == ic), None)
+    # buck inputs (Rev B: behind the bring-up headers): input-net pour around each VIN pin
+    for ic, vnet in (('U8', '/Power/24V_BUCK5'), ('U9', '/Power/24V_BUCK3')):
+        vin = next((p for p in by_net.get(vnet, []) if p['ref'] == ic), None)
         if vin:
-            ps = near('+24V', vin, 9)
-            _poly_zone(b, pcbnew.F_Cu, '+24V', f'VIN_{ic}_F', _hull(_box_pts([p['box'] for p in ps], 0.6)), 9)
-            report.append(f'+24V input pour at {ic}')
-    # +5V: buck output area, ideal-diode input area, and an In2 band between them
-    l_out = None
-    for p in by_net.get('+5V', []):
-        if p['ref'].startswith('L'):
-            l_out = p
+            ps = near(vnet, vin, 9)
+            _poly_zone(b, pcbnew.F_Cu, vnet, f'VIN_{ic}_F', _hull(_box_pts([p['box'] for p in ps], 0.6)), 9)
+            report.append(f'{vnet} input pour at {ic}')
+    # buck outputs up to the current-sense shunt (Rev B): +5V_BUCK and +3V3_BUCK on F.Cu
+    for onet, name in (('/Power/+5V_BUCK', 'P5V_BUCK_F'), ('/Power/+3V3_BUCK', 'P3V3_BUCK_F')):
+        ps = [p for p in by_net.get(onet, []) if p['fcu'] and not p['ref'].startswith('U2')]   # not the INA pins
+        if ps:
+            _poly_zone(b, pcbnew.F_Cu, onet, name, _hull(_box_pts([p['box'] for p in ps], 0.6)), 9)
+            report.append(f'{onet} output pour')
+    # +5V: from the shunt's load-side pad to the ideal diode, small F.Cu pours at both ends and an In2 band
+    shunt = next((p for p in by_net.get('+5V', []) if p['ref'].startswith('R') and
+                  any(q['ref'] == p['ref'] for q in by_net.get('/Power/+5V_BUCK', []))), None)
     q1 = [p for p in by_net.get('+5V', []) if p['ref'] in ('Q1', 'U19')]
-    if l_out and q1:
-        out_ps = near('+5V', l_out, 16)
-        out_poly = _hull(_box_pts([p['box'] for p in out_ps], 0.6))
+    if shunt and q1:
+        out_ps = near('+5V', shunt, 4)
+        out_poly = _hull(_box_pts([p['box'] for p in out_ps] + [(shunt['x'] - 2.5, shunt['y'] - 2.5,
+                                                               shunt['x'] + 2.5, shunt['y'] + 2.5)], 0.4))
         _poly_zone(b, pcbnew.F_Cu, '+5V', 'P5V_OUT_F', out_poly, 9)
         qx = sum(p['x'] for p in q1) / len(q1)
         qy = sum(p['y'] for p in q1) / len(q1)
         q_poly = _hull(_box_pts([p['box'] for p in q1] + [(qx - 3, qy - 2.5, qx + 3, qy + 2.5)], 0.4))
         _poly_zone(b, pcbnew.F_Cu, '+5V', 'P5V_DIODE_F', q_poly, 9)
-        ox = sum(p['x'] for p in out_ps) / len(out_ps)
-        oy = sum(p['y'] for p in out_ps) / len(out_ps)
-        _poly_zone(b, pcbnew.In2_Cu, '+5V', 'P5V_BAND_In2', _capsule((ox, oy), (qx, qy), 3.5), 5)
-        a = stitch(b, '+5V', (ox, oy), 6, 8, pads, out_poly)
+        ox, oy = shunt['x'], shunt['y']
+        _poly_zone(b, pcbnew.In2_Cu, '+5V', 'P5V_BAND_In2', _capsule((ox, oy), (qx, qy), 3.5), 6)
+        a = stitch(b, '+5V', (ox, oy), 5, 6, pads, out_poly)
         c = stitch(b, '+5V', (qx, qy), 4, 6, pads, q_poly)
         report.append(f'+5V band on In2 with {len(a)} + {len(c)} stitching vias')
+    # switched section rails (Rev B): an In2 area per section, above the global +3.3V pour (0) and
+    # below the USB GND strips (2..5) and the +5V band (6)
+    for net in sorted(n for n in by_net if n.endswith('/VCC3') or n.endswith('/+3V3_HUB')):
+        ps = by_net[net]
+        x1 = min(p['box'][0] for p in ps) - 1.0
+        y1 = min(p['box'][1] for p in ps) - 1.0
+        x2 = max(p['box'][2] for p in ps) + 1.0
+        y2 = max(p['box'][3] for p in ps) + 1.0
+        _poly_zone(b, pcbnew.In2_Cu, net, 'SEC_' + net.strip('/').replace('/', '_'),
+                   [(x1, y1), (x2, y1), (x2, y2), (x1, y2)], 1, solid=False, keep_stitching=True)
+        report.append(f'{net} section pour on In2')
     return report
 
 

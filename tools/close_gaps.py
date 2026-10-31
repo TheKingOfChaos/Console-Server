@@ -24,7 +24,8 @@ sys.path.insert(0, HERE)
 from route import _seg_dist, _box_dist  # noqa: E402
 
 CU = [pcbnew.F_Cu, pcbnew.In1_Cu, pcbnew.In2_Cu, pcbnew.B_Cu]
-POUR_NETS = {'+3.3V', 'GND'}   # nets with an inner-layer pour (In2 / In1)
+POUR_NETS = {'+3.3V', 'GND'}   # nets with an inner-layer pour (In2 / In1); section rails (Rev B) below
+POUR_NETS |= {f'/FT{k}/VCC3' for k in range(1, 5)} | {'/USB hub/+3V3_HUB'}
 MAZE_TODO = set()
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_pcb import OX, OY, W, H  # noqa: E402

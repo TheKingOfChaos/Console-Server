@@ -68,7 +68,8 @@ def centreline(b, nets, start, goal, margin=25.0):
     g = maze.Grid(b, nets, (x1, y1, x2, y2), 2 * (HALF + W / 2), CLR + 0.02, 0.5)
     blk = g.block[pcbnew.F_Cu]
     noisy = {'/Power/' + n for n in ('SW5', 'SW3', 'BOOT5', 'BOOT3', 'FB5', 'FB3', 'COMP5', 'COMP5_RC',
-                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3')}
+                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3',
+                                      '24V_BUCK5', '24V_BUCK3', '+5V_BUCK', '+3V3_BUCK')}   # Rev B: whole power stage
     for f in b.GetFootprints():
         # keep the pairs clear of the bucks' switch nodes and their feedback/compensation networks
         if any(p.GetNetname() in noisy for p in f.Pads()):
@@ -316,7 +317,8 @@ def route_all_bcu(b):
     """Route all four pairs (B.Cu + In2 GND strip), lock them. Returns report lines or None."""
     band = _band_capsule(b)
     noisy = {'/Power/' + n for n in ('SW5', 'SW3', 'BOOT5', 'BOOT3', 'FB5', 'FB3', 'COMP5', 'COMP5_RC',
-                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3')}
+                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3',
+                                      '24V_BUCK5', '24V_BUCK3', '+5V_BUCK', '+3V3_BUCK')}   # Rev B: whole power stage
     sites = {}
     # 1) transition sites: hub side staggered outward (port k at 1.0 + 1.0*(k-1) mm), FT side 1.4 mm out
     for k in (1, 2, 3, 4):
@@ -733,12 +735,20 @@ def route_port_2layer(b, k, band, noisy):
                r + (0 if out[0] > 0.5 else m), btm + (0 if out[1] > 0.5 else m))
         if m > 0:
             grid._rect(gB, box, HALF + W / 2)
-    # B.Cu runs may cross the +5V band: where they do, the band (priority 5) keeps its copper and is
-    # the pair's reference there; elsewhere the GND strip (priority 4) beats the 3.3 V pour (0)
+    # B.Cu runs may cross the +5V band: where they do, the band (priority 6) keeps its copper and is
+    # the pair's reference there; elsewhere the GND strip (2..5) beats the section (1) and 3.3 V (0) pours
     for p in (start, goal):
         i, j = grid.cell(*p)
         r = int(0.45 / maze.RES)
         gF[max(i - r, 0):i + r + 1, max(j - r, 0):j + r + 1] = False
+    if os.environ.get('USB_DUMP_GRID') == str(k):      # debug: obstacle map of F.Cu for this port
+        import numpy as _np
+        from PIL import Image as _Im
+        img = _np.where(gF, 255, 30).astype('uint8')
+        for p_ in (start, goal):
+            i_, j_ = grid.cell(*p_)
+            img[max(i_ - 4, 0):i_ + 5, max(j_ - 4, 0):j_ + 5] = 128
+        _Im.fromarray(img).save(os.environ.get('USB_DUMP_FILE', f'/tmp/usb_grid_{k}.png'))
     path = None
     if os.environ.get('USB_FCU_FIRST', '1') == '1':
         # try F.Cu only first (no vias, directly over the In1 plane): fast single-layer search
@@ -819,7 +829,7 @@ def route_port_2layer(b, k, band, noisy):
         cc = [(c[0][0] - d0[0] * STRIP_HALF, c[0][1] - d0[1] * STRIP_HALF)] + c[1:-1] + \
              [(c[-1][0] + d1[0] * STRIP_HALF, c[-1][1] + d1[1] * STRIP_HALF)]
         outline = offset(cc, STRIP_HALF) + list(reversed(offset(cc, -STRIP_HALF)))
-        _zone(b, pcbnew.In2_Cu, 'GND', outline, k, name=f'USB{k}_REF')    # 1..4: distinct, all below the +5V band (5)
+        _zone(b, pcbnew.In2_Cu, 'GND', outline, k + 1, name=f'USB{k}_REF')    # 2..5: above the section pours (1), below the +5V band (6)
         _zone(b, pcbnew.In2_Cu, '', outline, 0, rule_area=True, name=f'USB{k}_KEEPOUT')
     n_vias = sum(1 for _ in runs) - 1
     return lens, n_vias, b_len, [c for layer, c in runs if layer == pcbnew.B_Cu]
@@ -829,7 +839,8 @@ def route_all_2layer(b):
     """VDDA33 escape first, then the four pairs (trying orders), all locked. Report lines or None."""
     import itertools
     noisy = {'/Power/' + n for n in ('SW5', 'SW3', 'BOOT5', 'BOOT3', 'FB5', 'FB3', 'COMP5', 'COMP5_RC',
-                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3')}
+                                      'COMP3', 'COMP3_RC', 'RT5', 'RT3',
+                                      '24V_BUCK5', '24V_BUCK3', '+5V_BUCK', '+3V3_BUCK')}   # Rev B: whole power stage
     moved = clear_hub_corridor(b)
     if not preroute_vdda33(b):
         return None

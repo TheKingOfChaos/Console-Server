@@ -24,7 +24,8 @@ from sexp import parse, find, first  # noqa: E402
 NAME = 'usb-console-server'
 STOCK_FP = '/usr/share/kicad/footprints'
 OX, OY = 30.0, 30.0          # board origin on the page
-W, H = 138.0, 141.0          # board size, mm: RJ45 block + corner slots
+W, H = 150.0, 155.0          # board size, mm (Rev B: room for bring-up headers, current sense, terminal)
+PI_X0 = W - 10.0             # Pi footprint right edge; a 10 mm strip right of it carries the tall headers
 
 
 def mm(v):
@@ -158,7 +159,12 @@ class Board:
         fp.SetOrientationDegrees(rot)
         fp.SetPosition(P(x, y))
         box = self.courtyard(fp)
-        self.boxes.append((ref, *box, 'both' if ref in self.tht else back))
+        side = 'both' if ref in self.tht else back
+        hits = [r for r, a1, b1, a2, b2, sd in self.boxes if (sd == side or 'both' in (sd, side)) and
+                box[0] < a2 and box[2] > a1 and box[1] < b2 and box[3] > b1 and not r.startswith('H')]
+        if hits and not ref.startswith('H'):
+            print(f'  WARNING: {ref} placed on top of {", ".join(hits)}')
+        self.boxes.append((ref, *box, side))
         return box
 
     def collides(self, box, back=False, margin=0.2, ignore=(), ref=None):
@@ -187,6 +193,29 @@ class Board:
 
 # ------------------------------------------------------------------ placement plan
 
+def ref_of(prefix, net, value=None):
+    r = refs_of(prefix, net, value)
+    if not r:
+        raise KeyError((prefix, net, value))
+    return r[0]
+
+
+def refs_of(prefix, net, value=None):
+    """References with this prefix that have a pin on `net`: a full name ('/Power/SW5', '+24V')
+    matches exactly, a bare local name ('LEDA_HUB') matches the last path part."""
+    out = set()
+    for (r, _), n in _PINNET.items():
+        if not (r.startswith(prefix) and r[len(prefix):].isdigit()):
+            continue
+        hit = n == net if net.startswith('/') or net.startswith('+') else n.split('/')[-1] == net
+        if hit and (value is None or _COMPS[r]['value'] == value):
+            out.add(r)
+    return sorted(out, key=lambda x: int(x[len(prefix):]))
+
+
+_PINNET, _COMPS = {}, {}
+
+
 def plan(bd, comps):
     """Hand placement of anchors: the board is the RJ45 block wide plus a slotted
     chassis hole each side. Top band: hub + power (left), Pi HAT zone (right).
@@ -206,7 +235,7 @@ def plan(bd, comps):
         pl(f'U{k + 1}', cl + 14.4, y_ft)                     # FT4232H
         pl(f'U{10 + 2 * k}', cl + 7.3, y_max, 90)            # MAX3232E, channels A/B
         pl(f'U{11 + 2 * k}', cl + 21.5, y_max, 90)           # MAX3232E, channels C/D
-        ee_x = cl + 5.5 if abs(cl + 5.5 - 75.5) > 8 else cl + 21.5   # clear of the Pi standoffs
+        ee_x = cl + 5.5 if abs(cl + 5.5 - (PI_X0 - 52.5)) > 8 else cl + 21.5   # clear of the Pi standoffs
         pl(f'U{31 + k}', ee_x, y_ft - 12.0, 0)               # 93LC46B
         pl(f'X{2 + k}', cl + 4.2, y_ft - 3.5, 90)            # 12 MHz crystal at OSCI/OSCO
     # --- chain connectors in the edge strips beside the clusters
@@ -214,43 +243,104 @@ def plan(bd, comps):
     pl('J3', W - 2.6, y_ft + 24.2, 0)       # 24 V chain header, right edge
     edge_socket(bd, 'J9', y_ft - 0.8)     # signal link socket, left edge
     edge_socket(bd, 'J4', y_ft + 24.2)      # 24 V chain socket, left edge
-    # --- hub (top left), USB-C near the Pi's USB-A ports for a short cable
-    pl('J1', 60, 4.2, 180)          # USB-C on the top edge
-    pl('U22', 60, 13.5, 0)          # ESD array inline, between connector and hub
-    pl('U5', 44, 18, 0)             # USB2514B
-    pl('X1', 30, 9, 0)
-    pl('U20', 13, 22, 90)           # hub config EEPROM
-    # --- power (top left, below the hub)
-    pl('U8', 14, 42, 0)             # TPS54560B, 5 V
-    pl('U9', 42, 42, 0)             # TPS54360B, 3.3 V
-    pl('C46', 63, 44, 0)            # 24 V bulk, 10.5 mm tall: kept out from under the Pi
-    pl('Q2', 64, 56, 0)             # 24 V reverse-block FET
-    pl('F2', 53, 56, 90)
+    # --- Rev B: cluster bring-up header + LED in the band above each cluster, on the EEPROM's
+    #     column-opposite side so the USB pair (arriving at the FT4232H's west side) has a clear run
+    for k in range(4):
+        cl = rj_x - 57.5 + 28.75 * k
+        ee_x = cl + 5.5 if abs(cl + 5.5 - (PI_X0 - 52.5)) > 8 else cl + 21.5
+        hx = cl + (13.5, 21.5, 13.5, 21.5)[k]                 # off each pair's line into its FT4232H
+        pl(f'J{14 + k}', hx, y_ft - 17.5, 90)                # cluster 3.3 V bring-up header, horizontal
+        pl(ref_of('D', f'/FT{k + 1}/LEDA_FT'), hx, y_ft - 14.4, 0)   # cluster power LED
+        silk(bd, f'FT{k + 1} 3V3', hx, y_ft - 20.6, 0.9)
+    # --- Rev B floor plan: hub top middle (short USB-C run, pairs fall straight down a free corridor
+    #     x 55..83 to the clusters); power in the top-left corner, protection below the bucks.
+    pl('J1', 77, 4.2, 180)          # USB-C on the top edge, near the Pi's USB-A ports
+    pl('U22', 77, 13.5, 0)          # ESD array inline, between connector and hub
+    pl('U5', 72, 23, 0)             # USB2514B
+    pl('X1', 64, 13, 0)
+    pl('U20', 85, 28, 90)           # hub config EEPROM, beside the I2C pins
+    pl('J13', 47, 8, 90)            # hub 3.3 V bring-up header
+    silk(bd, 'HUB 3V3', 47, 4.4, 0.8)
+    pl(ref_of('D', 'LEDA_HUB'), 47, 11.4, 0)
+    # power: each buck's stage by hand - inductor at the SW pin, catch diode beside it, output caps
+    # AT the inductor, then the current-sense shunt and its INA219; bring-up header at the left edge
+    pl('U8', 16, 30, 0)             # TPS54560B, 5 V
+    pl(ref_of('L', '/Power/SW5'), 31, 30, 0)
+    pl(ref_of('D', '/Power/SW5'), 18.5, 20, 0)
+    for i, r in enumerate(refs_of('C', '/Power/+5V_BUCK', '22uF')):
+        pl(r, 41.2, 24.5 + 3.6 * i, 0)
+    pl(ref_of('R', '/Power/+5V_BUCK', '5m'), 46.2, 28, 90)     # 5 mOhm 2512 shunt
+    pl('U23', 46.2, 35.5, 0)        # power stage kept left of x ~48: the hub's USB pairs fall past it
+    pl('J11', 4.5, 34, 0)
+    silk(bd, '5V IN', 4.5, 28.6, 0.8)
+    pl('U9', 16, 50, 0)             # TPS54360B, 3.3 V
+    pl(ref_of('L', '/Power/SW3'), 27.5, 50, 0)
+    pl(ref_of('D', '/Power/SW3'), 21, 43.5, 0)
+    for i, r in enumerate(refs_of('C', '/Power/+3V3_BUCK', '22uF')):
+        pl(r, 35, 46.5 + 3.6 * i, 0)
+    pl(ref_of('R', '/Power/+3V3_BUCK', '10m'), 40, 50, 90)     # 10 mOhm 1206 shunt
+    pl('U24', 45, 50, 0)
+    pl('J12', 4.5, 54, 0)
+    silk(bd, '3V3 IN', 4.5, 48.6, 0.8)
+    # rail LEDs: a labelled column on the left edge, between the buck headers
+    for i, (net, lab) in enumerate((('+24V', '24V'), ('+5V', '5V'), ('+3.3V', '3V3'), ('+3V3_MCU', 'MCU'))):
+        led = ref_of('D', 'LEDA_' + net.strip('+').replace('.', 'V').replace('_', ''))
+        pl(led, 3.2, 43.0 + 2.2 * i, 0)
+        silk(bd, lab, 7.6, 43.0 + 2.2 * i, 0.7)
+    # 24 V protection below the bucks, terminal at the left edge
+    pl('C46', 8.5, 67, 0)           # 24 V bulk, 10.5 mm tall, next to the terminal
+    pl('F2', 16.5, 64, 90)
+    pl('Q2', 24.5, 66, 0)             # 24 V reverse-block FET
+    terminal_left(bd, 'J10', 76)    # 24 V screw terminal, wires leave the left edge
+    silk(bd, '24V IN  + / -', 16, 72, 0.9)
     # --- Raspberry Pi: face down ON TOP of the board, USB/Ethernet hanging past the top edge,
     #     microSD slot facing up. Pi spans X 72..128, Y 0..65 (+ jacks to Y -22.6).
-    m = pi_to_board(128.0, 65.0)
+    m = pi_to_board(PI_X0, 65.0)
     place_pi_header(bd, m)
     for i, (lx, ly) in enumerate(PI_HOLES):
         pl(f'H{5 + i}', *m(lx, ly))
     pi_drawing(bd, m)
     bd.pi_map = m
-    bd.pi_rect = (72.0, 0.0, 128.0, 65.0)
+    dx = PI_X0 - 128.0
+    bd.pi_rect = (72.0 + dx, 0.0, 128.0 + dx, 65.0)
     # low parts (<= 3 mm) may sit under the Pi
-    pl('Q1', 119, 58, 0)            # ideal-diode FET at the 5 V pins (2/4)
-    pl('U19', 113, 58, 0)           # LM74700
-    pl('D6', 105, 58, 90)           # SMAJ6.0A on PI_5V
-    pl('U21', 113, 26, 0)           # HAT ID EEPROM near pins 27/28
-    pl('U6', 94, 34, 0)             # ATtiny3216 housekeeping MCU
-    pl('U18', 100, 12, 0)           # Pi console RS-232
-    pl('U7', 84, 52, 0)             # LM317 for +3V3_MCU (SOT-223, 1.8 mm)
-    # tall parts go in the strip right of the Pi
-    pl('J7', 133, 13, 0)            # UPDI header
-    pl('J6', 133, 24, 0)            # Pi console header
-    pl(next(r for r, c in comps.items() if c['value'] == '470uF'), 133, 49, 90)   # PI_5V bulk
-    pl(next(r for r, c in comps.items() if c['value'] == '220uF'), 133, 59, 90)
+    pl('Q1', 119 + dx, 58, 0)       # ideal-diode FET at the 5 V pins (2/4)
+    pl('U19', 113 + dx, 58, 0)      # LM74700
+    pl('TVS_PI', 105 + dx, 58, 90)  # SMAJ6.0A on PI_5V
+    pl('U21', 113 + dx, 26, 0)      # HAT ID EEPROM near pins 27/28
+    pl('U6', 94 + dx, 34, 0)        # ATtiny3216 housekeeping MCU
+    pl('U18', 100 + dx, 12, 0)      # Pi console RS-232
+    pl('U7', 84 + dx, 52, 0)        # LM317 for +3V3_MCU (SOT-223, 1.8 mm)
+    # tall parts and the LEDs you want to see go in the strip right of the Pi
+    sx = PI_X0 + 5.0
+    pl('J7', sx, 13, 0)             # UPDI header
+    pl('J6', sx, 24, 0)             # Pi console header
+    pl('J19', sx, 35, 0)            # MCU UART header (Rev B)
+    pl(next(r for r, c in comps.items() if c['value'] == '470uF'), sx, 49, 90)   # PI_5V bulk
+    pl(next(r for r, c in comps.items() if c['value'] == '220uF'), sx, 59.2, 90)
+    pl(ref_of('D', 'LED_A'), sx - 2, 67, 90)          # MCU heartbeat
+    silk(bd, 'MCU', sx - 2, 70.2, 0.7)
+    pl(ref_of('D', 'LEDA_PI5V'), sx + 2.5, 67, 90)    # Pi 5 V present
+    silk(bd, 'PI5V', sx + 2.5, 70.2, 0.7)
     # --- slotted chassis mounts in the four corners
     for ref, (x, y) in zip(('H1', 'H2', 'H3', 'H4'), ((5, 5), (5, H - 5), (W - 5, H - 5), (W - 5, 5))):
         pl(ref, x, y)
+
+
+def terminal_left(bd, ref, y):
+    """Screw terminal on the left edge: pins vertical, wire openings (footprint +y side) facing the edge."""
+    fp = bd.fps[ref]
+    for rot in (90, 270):
+        fp.SetOrientationDegrees(rot)
+        fp.SetPosition(P(20, y))
+        p1, p2 = bd.pad_pos(ref, '1'), bd.pad_pos(ref, '2')
+        x1, y1, x2, y2 = bd.courtyard(fp)
+        # wire side = the courtyard edge farther from the pins in local +y (5.1 mm vs 5.8 mm): pick the
+        # rotation whose short side (pins to wire opening) points to -x
+        if abs(p1[0] - p2[0]) < 0.01 and (p1[0] - x1) < (x2 - p1[0]):
+            bd.place(ref, 20 + 0.3 - x1, y, rot)
+            return
+    raise RuntimeError('terminal orientation')
 
 
 def edge_socket(bd, ref, y):
@@ -555,7 +645,7 @@ def project_netclasses():
     # cannot neck down); the real current is carried by copper pours added in route.py.
     classes = [dict(base, name='Default'),
                dict(base, name='Power', track_width=0.3, clearance=0.15, via_diameter=0.6, via_drill=0.3, priority=4),
-               dict(base, name='HighCurrent', track_width=0.6, clearance=0.2, via_diameter=0.8, via_drill=0.4,
+               dict(base, name='HighCurrent', track_width=0.6, clearance=0.15, via_diameter=0.8, via_drill=0.4,
                     priority=1),
                dict(base, name='HV_24V', track_width=0.5, clearance=0.3, via_diameter=0.6, via_drill=0.3, priority=2),
                dict(base, name='Chain24V', track_width=1.0, clearance=0.3, via_diameter=0.8, via_drill=0.4,
@@ -569,7 +659,10 @@ def project_netclasses():
             ('HighCurrent', '+5V'), ('HighCurrent', 'PI_5V'), ('HighCurrent', '*/SW5'),
             ('Power', '+3.3V'), ('Power', 'GND'), ('Power', '+3V3_MCU'), ('Power', 'PI3.3'),
             ('Power', '*/VCORE'), ('Power', '*/VPLL'), ('Power', '*/VPHY'), ('Power', '*/VDDA33'),
-            ('Power', '*/VBUS_UP')]
+            ('Power', '*/VBUS_UP'),
+            # Rev B section rails
+            ('HV_24V', '*/24V_BUCK?'), ('HighCurrent', '*/+5V_BUCK'), ('Power', '*/+3V3_BUCK'),
+            ('Power', '*/+3V3_HUB'), ('Power', '*/VCC3')]
     d['net_settings'] = {
         'classes': classes,
         'meta': {'version': 4},
@@ -592,13 +685,15 @@ def project_netclasses():
 
 def main():
     comps, pinnet = load_netlist()
+    _PINNET.update(pinnet)
+    _COMPS.update(comps)
     bd = Board()
     rules(bd)
     for c in comps.values():
         bd.add_footprint(c, pinnet)
     # the SMAJ6.0A on PI_5V: find it by value instead of guessing its reference
     d6 = next(r for r, c in comps.items() if c['value'] == 'SMAJ6.0A')
-    plan_refs = {'D6': d6}
+    plan_refs = {'TVS_PI': d6}
     orig_place = bd.place
     bd.place = lambda ref, *a, **k: orig_place(plan_refs.get(ref, ref), *a, **k)
     plan(bd, comps)
@@ -628,8 +723,9 @@ def main():
     outline(bd)
     for layer in (pcbnew.In1_Cu,):
         gnd_plane(bd, layer)
-    silk(bd, 'USB CONSOLE SERVER  rev A  -  16 x RS-232 (Cisco console, rolled)', W / 2, 62, 1.5, pcbnew.B_SilkS)
+    silk(bd, 'USB CONSOLE SERVER  rev B  -  16 x RS-232 (Cisco console, rolled)', W / 2, 62, 1.5, pcbnew.B_SilkS)
     silk(bd, 'BOARD ID: [ ] 1  [ ] 2  [ ] 3   (ID straps on MCU sheet; I2C 0x30/0x31/0x32)', W / 2, 66, 1.2, pcbnew.B_SilkS)
+    silk(bd, 'BRING-UP HEADERS: 1 = supply  2 = section  3 = GND.  Jumper 1-2 = on', W / 2, 70, 1.2, pcbnew.B_SilkS)
     out = os.path.join(PROJ, NAME + '.kicad_pcb')
     project_netclasses()
     bd.b.SetFileName(out)
