@@ -729,17 +729,19 @@ def route_port_2layer(b, k, band, noisy):
     # keep a 1.6 mm escape strip clear in front of every OTHER pin on the FT4232H side the pair
     # enters, so the pair arrives square-on instead of running along the pin row and walling
     # in its neighbours (Rev B: VPHY, pin 4, was sealed in that way)
+    # (off by default: on the Rev B floor plan the crystal and passives west of each FT4232H leave no
+    # room for it, and FT1's VPHY was escaped by hand instead; set USB_ESCAPE_STRIP=1.6 to try it)
     ff = b.FindFootprintByReference(f'U{k}')
     fc = xy(ff.GetPosition())
     own = {p.GetNumber() for p in fpads}
-    for p in ff.Pads():
+    ext = float(os.environ.get('USB_ESCAPE_STRIP', '0'))
+    for p in (ff.Pads() if ext > 0 else []):
         q = xy(p.GetPosition())
         if p.GetNumber() in own or (q[0] - fc[0]) * fout[0] + (q[1] - fc[1]) * fout[1] < 3.0:
             continue
         bb = p.GetBoundingBox()
         x1_, y1_, x2_, y2_ = (pcbnew.ToMM(bb.GetLeft()), pcbnew.ToMM(bb.GetTop()), pcbnew.ToMM(bb.GetRight()),
                               pcbnew.ToMM(bb.GetBottom()))
-        ext = 1.6
         x1_, x2_ = (x1_ + min(0, fout[0]) * ext, x2_ + max(0, fout[0]) * ext)
         y1_, y2_ = (y1_ + min(0, fout[1]) * ext, y2_ + max(0, fout[1]) * ext)
         grid._rect(gF, (x1_, y1_, x2_, y2_), HALF + W / 2)

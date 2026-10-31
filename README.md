@@ -1,26 +1,48 @@
 # USB Console Server — KiCad 10 project
 
 48 RS-232 console ports on one Raspberry Pi: three identical boards, 16 ports each.
-Built from the design record of 2026-10-10. KiCad 10.0.7.
+Built from the design record of 2026-10-10. KiCad 10.0.7. **This is Rev B** (git tag `rev-A` is the first board).
 
 | | State |
 |---|---|
 | Schematic | Complete, 7 sheets (FT4232H cluster reused 4×). ERC: **0 violations** at all severities. |
-| Netlist | Checked pin-by-pin against the design intent (`tools/verify_netlist.py`): 236 nets, 0 mismatches. |
-| PCB | **138 × 141 mm**, 4 layers, all 320 footprints placed, **fully routed**, ~3000 track segments, ~1080 vias. USB pairs coupled and length-matched (below). |
+| Netlist | Checked pin-by-pin against the design intent (`tools/verify_netlist.py`): 255 nets, 0 mismatches. |
+| PCB | **150 × 155 mm**, 4 layers, all 361 footprints placed, **fully routed**, ~3330 track segments, ~1170 vias. USB pairs coupled, length-matched and all on F.Cu (below). |
 | PCB DRC | **0 errors, 0 unconnected**, 0 schematic-parity issues. Warnings: silkscreen overlaps only. |
 | BOM | `bom/usb-console-server_bom.csv`. Every line has an LCSC number. |
+
+## What changed in Rev B
+
+- **Bring up each section on its own.** Every section gets its power through a **3-pin header: 1 = supply, 2 = section, 3 = GND**:
+
+  | Header | Section | Supply |
+  |---|---|---|
+  | J11 | 5 V buck (input side) | +24V |
+  | J12 | 3.3 V buck (input side) | +24V |
+  | J13 | USB hub, its EEPROM and crystal (+3V3_HUB) | +3.3V |
+  | J14–J17 | FT1–FT4 clusters: FT4232H, EEPROM, both MAX3232E (VCC3) | +3.3V |
+
+  - **Jumper on 1–2** = normal running (7 jumper caps per board, LCSC C100114).
+  - **Jumper off**: the section is unpowered. Put an ammeter across 1–2 to read its current, or feed it from a bench supply on 2–3.
+  - A jumper put on 2–3 by mistake only grounds the dead section; it cannot short a supply.
+  - The Pi needs no header: it is simply not plugged in for early bring-up.
+- **Power LEDs** (green, ~1 mA) on +24V, +5V, +3.3V, +3V3_MCU (a labelled column on the left edge), PI_5V and the MCU heartbeat (right of the Pi), the hub (by J13) and each cluster (by its header).
+- **Current and voltage sense:** an INA219 behind a shunt on each buck output, 5 mΩ on +5V (U23, I²C 0x40) and 10 mΩ on +3.3V (U24, 0x41). They sit on the MCU's own I²C bus (PA5/PA6, bit-banged, powered from +3V3_MCU), which replaces the old 5 V / 3.3 V ADC dividers. The buck feedback is taken before the shunt.
+- **24 V screw terminal J10** (5.08 mm, 2-pin, 18 A) on the left edge, wired to +24V_RAW like the chain connectors: wire up one board, and the chain feeds the rest.
+- **MCU UART header J19** (TX PB2 – GND – RX PB3). It shares the SPARE lines of the link, so debug one board at a time.
+- **Test points** for each cluster's VCC3 and the INA bus (36 in total).
+- **Layout:** the board grew to 150 × 155 mm. The hub moved to the top middle, so the four USB pairs drop straight down to their clusters, all on F.Cu with no vias. Each buck's power stage (inductor, catch diode, output caps, shunt, INA219) is now placed by hand: in Rev A the autoplacer had put the output caps 70 mm from the inductors.
 
 ## Sheets
 
 | Sheet | Contents |
 |---|---|
-| `power` | 24 V input protection (F2 → Q2 → D3 → C46), board-to-board power J3/J4, 5 V and 3.3 V bucks, LM317 MCU rail |
+| `power` | 24 V terminal J10, input protection (F2 → Q2 → D3 → C46), board-to-board power J3/J4, 5 V and 3.3 V bucks behind bring-up headers J11/J12, shunts + INA219s, rail LEDs, LM317 MCU rail |
 | `pi` | 2×20 Pi socket, LM74700 ideal diode + Q1, PI_5V bulk + TVS, HAT ID EEPROM, Pi console SP3232 + J6 |
 | `hub` | USB-C, PRTR5V0U2F (inline), USB2514BI in I²C-EEPROM mode, 24 MHz crystal, 24LC02B |
 | `ftdi` (×4: FT1–FT4) | FT4232HL, 12 MHz crystal, 93LC46B, two MAX3232E → 4 RS-232 ports |
 | `ports` | One HC-RJ45-059D 2×8 block (16 units + shell), shield 0R / 1M / C option |
-| `mcu` | ATtiny3216, ID straps, rail dividers, JP2, status LED, UPDI, inter-board signal link J8/J9 |
+| `mcu` | ATtiny3216, ID straps, 24 V divider, JP2, INA bus pull-ups, status LED, UPDI, UART header J19, inter-board signal link J8/J9 |
 
 Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, D3, D4, C24, C46, C62, C63, C174, X1, JP2, U10–U17.
 
@@ -59,26 +81,26 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
     - **Without it, none of the FT4232Hs will enumerate.**
     - The upstream port is not swapped (bit 0 stays 0).
 
-## Board layout (placement only)
+## Board layout
 
-138 mm wide: the 115 mm RJ45 block plus a slotted M3 chassis hole in each bottom corner beside it.
+150 × 155 mm: the 115 mm RJ45 block along the bottom, a slotted M3 chassis hole in each corner.
 
-- **Bottom edge.** The RJ45 block, front flush with the edge. Silkscreen `P02 / P01`, etc. above each column; slots H2/H3 at its ends.
-- **Middle band.** FT1–FT4 clusters, each over its own two jack columns (FT1 at the P01 end). The MAX3232E row sits next to the jacks, then the FT4232H with its crystal and decoupling, then the EEPROM.
-- **Edge strips beside the clusters.** Board-to-board connectors: J8 (link) and J3 (24 V) headers on the right, J9/J4 sockets on the left, same heights.
-- **Top right.** The Raspberry Pi, face down above the board (X 72–128, Y 0–65), with its jacks over the top edge. J2 runs down the right side. Under the Pi: the MCU, Pi console transceiver, HAT EEPROM, ideal diode and LM317 (all low parts). In the strip to its right: the PI_5V electrolytics plus the UPDI (J7) and console (J6) headers.
-- **Top left.** USB-C (near the Pi's USB-A ports for a short cable), the hub, both bucks, and the 24 V input protection.
-- **Top corners.** Slots H1/H4.
+- **Bottom edge.** The RJ45 block, front flush with the edge. Silkscreen `P02 / P01`, etc. above each column.
+- **Middle band.** FT1–FT4 clusters, each over its own two jack columns (FT1 at the P01 end): MAX3232E row next to the jacks, then the FT4232H with its crystal and decoupling, then the EEPROM. Above each cluster: its bring-up header (`FT1 3V3` ...) and power LED.
+- **Edge strips beside the clusters.** Board-to-board connectors: J8 (link) and J3 (24 V) headers on the right, J9/J4 sockets on the left, same heights. J10, the 24 V screw terminal, sits above J9 with its wire openings at the left edge.
+- **Top left: power.** J11/J12 bring-up headers and the rail LEDs on the left edge; the 5 V buck (U8, L1, D1, output caps, shunt R10, INA219 U23) and below it the 3.3 V buck (U9, L2, D2, caps, R11, U24); the 24 V protection (F2, Q2, C46) next to the terminal.
+- **Top middle: USB.** USB-C J1 on the top edge near the Pi's USB-A ports, the PRTR5V0U2F, the hub U5 with its crystal and EEPROM, J13 (hub bring-up header). A clear corridor below the hub carries the four USB pairs to the clusters.
+- **Top right.** The Raspberry Pi, face down above the board (X 84–140, Y 0–65), with its jacks over the top edge; J2 runs down its right side. Under the Pi: the MCU, Pi console transceiver, HAT EEPROM, ideal diode and LM317 (all low parts). In the 10 mm strip right of it: UPDI J7, Pi console J6, MCU UART J19, the PI_5V electrolytics and the MCU / PI5V LEDs.
 
 ## Test points
 
-26 bare pads (no BOM cost), all reachable with the Pi fitted. The board builder keeps them out from under the Pi.
+36 bare pads (no BOM cost), all reachable with the Pi fitted. The board builder keeps them out from under the Pi.
 
 | Where | Test points |
 |---|---|
-| Rails | +24V_RAW, +24V, +5V, +3.3V, +3V3_MCU, PI_5V, PI3.3, and each FT4232H's 1.8 V VCORE (×4) |
-| Ground | three: by the bucks, by the USB-C input, beside the jacks (scope ground) |
-| Buses | PI_SDA / PI_SCL, HUB_SDA / HUB_SCL |
+| Rails | +24V_RAW, +24V, +5V, +3.3V, +3V3_MCU, PI_5V, PI3.3, and per cluster its VCC3 and 1.8 V VCORE (×4) |
+| Ground | by the bucks, by the USB-C input, beside the jacks (scope ground), and one per cluster |
+| Buses | PI_SDA / PI_SCL, HUB_SDA / HUB_SCL, INA_SDA / INA_SCL |
 | Control | HUB_MR_N, FTDI_RST_N, RESET_REQ, ALERT, VBUS_UP, MCU spare PA7 |
 | Pi console | PITXD / PIRXD (TTL side; the RS-232 side is on J6) |
 
@@ -110,8 +132,9 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
    | HighCurrent | 0.6 mm | 5 V path and switch nodes |
 
 3. **Power copper** carries the real current; the traces only guarantee connectivity:
-   - pours on both buck switch nodes, both buck inputs, the 5 V buck output and the ideal-diode input;
-   - a 7 mm-wide +5V band on In2 from the buck to the Pi, stitched with vias at both ends.
+   - pours on both buck switch nodes, both buck inputs, both buck outputs (up to the shunts) and the ideal-diode input;
+   - a 7 mm-wide +5V band on In2 from the 5 V shunt to the Pi, stitched with vias at both ends;
+   - an In2 pour per switched section (+3V3_HUB, each cluster's VCC3) over that section.
 4. **Ground stitching:** a 4 mm via grid across the board, and a via grid under each FT4232H and the hub.
 5. **Cleanup** (`close_gaps.py`), driven by KiCad's own DRC report:
    - joins the autorouter's near misses;
@@ -119,26 +142,25 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
    - maze-routes anything still open, ripping up the nets that wall it in if needed;
    - removes any via that violates clearance.
 
-**USB pairs (hub → FT4232H), routed as coupled pairs:**
+**USB pairs (hub → FT4232H), routed as coupled pairs, all on F.Cu over the In1 ground plane, no vias:**
 
-| Port | D+ | D− | Skew | Layers |
-|---|---|---|---|---|
-| 1 | 94.4 mm | 93.3 mm | 1.1 mm | F.Cu only, over the In1 ground plane |
-| 2 | 73.7 mm | 72.4 mm | 1.2 mm | F → B.Cu (70 mm) → F, 2 vias per line |
-| 3 | 98.6 mm | 99.7 mm | 1.1 mm | F → B.Cu (93 mm) → F, 2 vias per line |
-| 4 | 100.7 mm | 98.8 mm | 1.9 mm | F.Cu only |
-| upstream (USB-C → hub) | 29.6 mm | 30.7 mm | 1.1 mm | F.Cu |
+| Port | D+ | D− | Skew |
+|---|---|---|---|
+| 1 | 97.4 mm | 96.2 mm | 1.1 mm |
+| 2 | 82.4 mm | 81.2 mm | 1.1 mm |
+| 3 | 83.2 mm | 82.1 mm | 1.1 mm |
+| 4 | 89.4 mm | 87.5 mm | 1.9 mm |
+| upstream (USB-C → hub) | 17.1 mm | 18.0 mm | 0.9 mm |
 
 - 1–2 mm of skew is ≈ 7–13 ps; USB 2.0 high speed tolerates far more, so no tuning meanders were added.
-- Where a pair runs on B.Cu, the layer above it (In2) carries a 2.4 mm-wide **ground strip** under the pair, with a no-track keepout and ground vias beside the pair every 4 mm, so B.Cu runs have an unbroken reference too.
-- The pair router keeps B.Cu runs away from the hub and FT4232H bodies so their other pins can still escape on In2.
-- To make room, **FB1, C43 and C44** (hub VDDA33 filter) were moved ~2 mm out of the hub's USB corridor.
+- The pair router keeps the pairs clear of the bucks' whole power stage and never routes under an IC body.
 - This depends on the **PRTSP = 0x1E** hub setting (decision 10).
-- Previous board (uncoupled pairs): `backups/usb-console-server_saved-edits_20261011-0957.kicad_pcb`.
+- Hand fixes after the generated routing (so `build_all.sh` alone does not reproduce this board exactly): FT1's VPHY escapes through a 0.45 mm via at pin 4 (its VCORE B.Cu track was moved 0.55 mm to make room), TP12 moved 0.6 mm, one GND stitching via in an isolated F.Cu pour island.
 
 **Review before ordering:**
-- **USB pair impedance:** 0.16 mm / 0.15 mm gap is ≈ 90 Ω differential on JLC04161H-3313 for the F.Cu runs. The B.Cu runs reference the thin In2 strip; confirm both in JLCPCB's impedance calculator.
-- **Buck loops:** both are compact pours, but check the input-cap / switch / diode loop of each buck against the TPS54x60 layout guide.
+- **USB pair impedance:** 0.16 mm / 0.15 mm gap is ≈ 90 Ω differential on JLC04161H-3313 (F.Cu over In1). Confirm it in JLCPCB's impedance calculator.
+- **Buck loops:** the power stages are now placed by hand, but still check each input-cap / switch / diode loop against the TPS54x60 layout guide.
+- **INA219 shunt routing:** IN+/IN- are routed from the shunt pads by the autorouter; check they are Kelvin connections (from the shunt pads themselves, not from the pour).
 - **Autorouted traces:** the routing is generated, so expect some odd detours. Re-run DRC after any hand edit.
 
 ## 3D model
@@ -157,15 +179,16 @@ Reference designators the record names are kept: F2, Q1, Q2, R9, R28, R34, R43, 
 
 | File | Upload as |
 |---|---|
-| `usb-console-server_gerbers.zip` | the PCB: 4 layers, 138 × 141 mm, 1.6 mm, impedance control with stackup **JLC04161H-3313** |
-| `usb-console-server_bom_jlc.csv` | assembly BOM: 61 lines, every one with an LCSC number (SMD only) |
-| `usb-console-server_cpl_jlc.csv` | pick-and-place: 271 parts, all on the top side |
+| `usb-console-server_gerbers.zip` | the PCB: 4 layers, 150 × 155 mm, 1.6 mm, impedance control with stackup **JLC04161H-3313** |
+| `usb-console-server_bom_jlc.csv` | assembly BOM: 65 lines, every one with an LCSC number (SMD only) |
+| `usb-console-server_cpl_jlc.csv` | pick-and-place: 293 parts, all on the top side |
 | `usb-console-server_hand_solder.csv` | not uploaded: the through-hole connectors you solder yourself, with LCSC numbers to buy them |
 | `usb-console-server_lcsc_order_3boards.csv` | LCSC BOM Tool upload: **every** part for a full set of 3 boards (to build them all yourself) |
-| `usb-console-server_lcsc_order_3boards_through_hole_only.csv` | LCSC BOM Tool upload: only the hand-soldered connectors, when JLCPCB assembles the SMD parts |
+| `usb-console-server_lcsc_order_3boards_through_hole_only.csv` | LCSC BOM Tool upload: only the hand-soldered connectors and jumper caps, when JLCPCB assembles the SMD parts |
+| `..._5boards.csv`, `..._5boards_through_hole_only.csv` | the same for 5 boards |
 
 - Other board counts: `python3 tools/lcsc_order.py <boards>`. LCSC rounds each line up to its minimum order quantity.
-- **Not assembled by JLC:** test points, mounting holes and DNP parts, and every through-hole connector (J2 Pi socket, J3/J4 power chain, J5 RJ45 block, J8/J9 link, J6/J7 debug headers). These are soldered by hand; see `usb-console-server_hand_solder.csv`.
+- **Not assembled by JLC:** test points, mounting holes and DNP parts, and every through-hole part (J2 Pi socket, J3/J4 power chain, J5 RJ45 block, J8/J9 link, J6/J7/J19 debug headers, J10 terminal, J11–J17 bring-up headers) plus the 7 jumper caps. These are soldered by hand; see `usb-console-server_hand_solder.csv`.
 - **Check every part's rotation in JLC's placement preview.** KiCad and JLC disagree on the zero orientation of some packages (often SOT-223, SOT-23-6, SOIC, the LQFP/QFN ICs, diodes, electrolytics, crystals). Fix any that look wrong in their editor before paying.
 - Stock and "extended part" fees change daily; JLC flags missing parts when you upload the BOM.
 
@@ -175,14 +198,17 @@ Everything is generated from `tools/design.py` (schematic) and `tools/build_pcb.
 
 **Rebuilding overwrites the board placement.** Once you start editing the PCB by hand, treat the KiCad files as the source and stop regenerating.
 
-## Bring-up checklist (from the record)
+## Bring-up checklist
 
-1. 24 V with no load, then reverse polarity: nothing downstream should see voltage.
-2. All three rails unloaded; the 5 V buck must be stable at no load.
-3. MCU alone: UPDI, ID straps read with a meter, heartbeat.
-4. `i2cdetect -y 1` shows 0x30.
-5. Hub EEPROM (**including PRTSP = 0x1E**), `lsusb`.
-6. One FT4232H, then its EEPROM serial (`HUB<b>-P<n>`).
-7. Loopback (pin 3 ↔ pin 6) on every port, including one upper and one lower jack early.
-8. udev rules.
-9. Chain boards 2 and 3.
+Start with **every bring-up jumper off** (J11–J17) and no Pi.
+
+1. **24 V input.** 24 V on J10 with a current-limited supply: the 24V and MCU LEDs light, nothing else. Then reverse polarity: nothing downstream may see voltage.
+2. **MCU alone** (it runs from its own LM317): UPDI on J7, heartbeat LED, ID straps read with a meter, J19 UART.
+3. **5 V buck:** jumper J11. 5V LED on, 5.09 V at TP +5V, stable with no load (it is unloaded on boards 2 and 3 for life). INA219 U23 at 0x40 on the MCU's INA bus.
+4. **3.3 V buck:** jumper J12. 3V3 LED on, 3.33 V, INA219 U24 at 0x41.
+5. **Hub:** jumper J13 (meter across 1–2 first: expect ~50–100 mA). Program the hub EEPROM (**including PRTSP = 0x1E**), then `lsusb` from a PC shows the hub.
+6. **One cluster at a time:** jumper J14 (FT1), check its current on 1–2 (~70–150 mA), `lsusb` shows the FT4232H, program its EEPROM serial (`HUB<b>-P<n>`), then J15–J17.
+7. **Pi:** fit it on one board, PI5V LED, `i2cdetect -y 1` shows 0x30.
+8. **Loopback** (pin 3 ↔ pin 6) on every port, including one upper and one lower jack early.
+9. udev rules.
+10. Chain boards 2 and 3.

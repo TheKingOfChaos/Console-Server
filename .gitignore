@@ -14,3 +14,4 @@ __pycache__/
 backups/*
 !backups/usb-console-server_saved-edits_20261011-0957.kicad_pcb
 !backups/usb-console-server_saved-edits_20261011-0957.kicad_pro
+*.try

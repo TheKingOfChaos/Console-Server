@@ -228,6 +228,12 @@ def commit(b, net, result, width=0.16, via=(0.5, 0.25), start=None, goal=None, s
             q = p2[0]
             if not any(math.dist(q, v) < 0.05 for v in vias):
                 vias.append(q)
+    # a route that starts/ends on a layer its endpoint item is not on needs a via there too
+    for layers, run, idx in ((start_layers, runs[0] if runs else None, 0), (goal_layers, runs[-1] if runs else None, -1)):
+        if layers and run and run[1] and run[0] not in layers:
+            q = run[1][idx]
+            if not any(math.dist(q, v) < 0.05 for v in vias):
+                vias.append(q)
     netinfo = b.FindNet(net)
     for i, (layer, pts) in enumerate(runs):
         # hook onto the pad only on a layer the pad is actually on

@@ -290,7 +290,7 @@ r.C('100nF', 'DBG_VP', 'GND')
 r.C('100nF', 'GND', 'DBG_VN')
 r.C('100nF', 'PI3.3', 'GND')
 pi.add('Connector_Generic:Conn_01x03', (370, 240), 'J6', 'PI_CONSOLE', {'1': 'DBG_TX', '2': 'GND', '3': 'DBG_RX'},
-       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03'), rot=180)
+       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03_hdr'), rot=180)
 
 # =====================================================================
 # USB upstream + hub
@@ -511,7 +511,7 @@ r.C('1uF', '+3V3_MCU', 'GND', key='C:1uF')
 mc.add('Connector:TestPoint', (60, 175), 'TP', 'PA7', {'1': 'MCU_PA7'}, fp='TestPoint:TestPoint_Pad_D1.5mm',
        in_bom=False)
 mc.add('Connector_Generic:Conn_01x03', (40, 75), 'J7', 'UPDI', {'1': 'UPDI', '2': 'GND', '3': '+3V3_MCU'},
-       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03'), rot=180)
+       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03_hdr'), rot=180)
 mc.text('UPDI: GND in the centre. A reversed plug swaps\n+3V3 and UPDI but never the reference.', (20, 85), 1.27)
 
 mc.text('RAIL MONITORING: +24V on the ADC (~2.0 V at nominal vs internal 2.5 V ref). +5V and +3.3V voltage AND\n'

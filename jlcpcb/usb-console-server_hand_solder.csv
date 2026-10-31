@@ -1,9 +1,10 @@
-Designator,Qty per board,LCSC Part #,Value,Description
-J5,1,C46261623,HC-RJ45-059D-2x8-2-04,"RJ45 2x8 block, 16 ports"
-J2,1,C2977589,RPi GPIO 2x20,"2x20 female socket, 2.54 mm (Pi GPIO, Pi mounts face-down on it)"
-J3,1,C492412,PWR_CHAIN,1x4 right-angle pin header (power chain in)
-J4,1,C2897386,PWR_CHAIN,1x4 right-angle socket (power chain out)
-J8,1,C492417,LINK,1x9 right-angle pin header (board link)
-J9,1,C2897391,LINK,1x9 right-angle socket (board link)
-J6,1,C49257,PI_CONSOLE,"1x3 pin header 2.54 mm (Pi console, optional)"
-J7,1,C49257,UPDI,"1x3 pin header 2.54 mm (UPDI programming, optional)"
+LCSC Part Number,Qty per board,Value,Footprint,Designators
+C2977589,1,RPi GPIO 2x20,PinSocket_2x20_P2.54mm_Vertical,J2
+C492412,1,PWR_CHAIN,PinHeader_1x04_P2.54mm_Horizontal,J3
+C2897386,1,PWR_CHAIN,PinSocket_1x04_P2.54mm_Horizontal,J4
+C46261623,1,HC-RJ45-059D-2x8-2-04,RJ45_HC-RJ45-059D-2x8,J5
+C49257,10,PI_CONSOLE,PinHeader_1x03_P2.54mm_Vertical,"J6,J7,J11,J12,J13,J14,J15,J16,J17,J19"
+C492417,1,LINK,PinHeader_1x09_P2.54mm_Horizontal,J8
+C2897391,1,LINK,PinSocket_1x09_P2.54mm_Horizontal,J9
+C8465,1,24V IN,"TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal",J10
+C100114,7,2.54 mm jumper cap,-,one per bring-up header J11-J17

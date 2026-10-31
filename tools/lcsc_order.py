@@ -43,7 +43,12 @@ def main():
         p['refs'].append(r['Ref'])
         p['qty'] += sets if r['Ref'] in ONE_PER_SET else boards
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from jlc_export import HAND_SOLDER
+    from jlc_export import HAND_SOLDER, EXTRA
+    for lc, q, v, note in EXTRA:              # loose parts (jumper caps): no symbol on the board
+        p = parts.setdefault(lc, {'refs': [], 'value': v, 'mpn': '', 'fp': '-', 'qty': 0})
+        p['refs'].append(note)
+        p['qty'] += q * boards
+    HAND_SOLDER = set(HAND_SOLDER) | {note for _, _, _, note in EXTRA}
     for suffix, sel in (('', parts),
                         ('_through_hole_only', {k: v for k, v in parts.items()
                                                 if any(r in HAND_SOLDER for r in v['refs'])})):

@@ -23,7 +23,10 @@ SCH = os.path.join(ROOT, NAME + '.kicad_sch')
 OUT = os.path.join(ROOT, 'jlcpcb')
 # soldered by hand: the through-hole connectors (Pi socket, power chain, RJ45 block, link)
 # and the 3-pin debug headers (Pi console, UPDI)
-HAND_SOLDER = {'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9'}
+HAND_SOLDER = {'J2', 'J3', 'J4', 'J5', 'J6', 'J7', 'J8', 'J9',
+               'J10', 'J11', 'J12', 'J13', 'J14', 'J15', 'J16', 'J17', 'J19'}   # Rev B: terminal + bring-up/UART headers
+# loose parts with no footprint: one jumper cap per bring-up header (J11-J17)
+EXTRA = [('C100114', 7, '2.54 mm jumper cap', 'one per bring-up header J11-J17')]
 # schematic LCSC number -> JLCPCB Basic part with the same spec. The schematic carries parts that LCSC
 # itself has in stock (Oct 2026); JLCPCB's own warehouse still stocks these Basic equivalents, which
 # avoids the per-type Extended-part fee at assembly.
@@ -108,6 +111,22 @@ def main():
             w.writerow([ref, f"{float(p['PosX']):.4f}mm", f"{float(p['PosY']):.4f}mm",
                         'Top' if p['Side'].lower().startswith('top') else 'Bottom', f"{float(p['Rot']):.1f}"])
 
+    # hand-solder list: the through-hole parts left out above, plus loose parts
+    hs = {}
+    for ref in sorted(HAND_SOLDER, key=refkey):
+        sp = parts.get(ref)
+        if sp is None:
+            continue
+        e = hs.setdefault(sp['LCSC'].strip() or '-', {'refs': [], 'value': sp['Value'],
+                                                     'fp': sp['Footprint'].split(':')[-1]})
+        e['refs'].append(ref)
+    with open(os.path.join(OUT, NAME + '_hand_solder.csv'), 'w', newline='') as f:
+        w = csv.writer(f)
+        w.writerow(['LCSC Part Number', 'Qty per board', 'Value', 'Footprint', 'Designators'])
+        for lc, e in hs.items():
+            w.writerow([lc, len(e['refs']), e['value'], e['fp'], ','.join(e['refs'])])
+        for lc, q, v, note in EXTRA:
+            w.writerow([lc, q, v, '-', note])
     print(f'gerber zip: {len(files)} files')
     print(f'BOM: {len(groups)} lines, {len(fitted)} placements')
     print(f'not assembled: {len(skipped)} ({", ".join(sorted(skipped, key=refkey))})')

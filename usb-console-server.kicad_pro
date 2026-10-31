@@ -331,7 +331,7 @@
       },
       {
         "bus_width": 12,
-        "clearance": 0.2,
+        "clearance": 0.15,
         "diff_pair_gap": 0.25,
         "diff_pair_via_gap": 0.25,
         "diff_pair_width": 0.2,
@@ -460,6 +460,26 @@
       {
         "netclass": "Power",
         "pattern": "*/VBUS_UP"
+      },
+      {
+        "netclass": "HV_24V",
+        "pattern": "*/24V_BUCK?"
+      },
+      {
+        "netclass": "HighCurrent",
+        "pattern": "*/+5V_BUCK"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "*/+3V3_BUCK"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "*/+3V3_HUB"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "*/VCC3"
       }
     ]
   },
