@@ -18,6 +18,9 @@ LCSC = {
     'J:1x04_hdr': 'C492412', 'J:1x04_skt': 'C2897386',
     'D:LED_G': 'C12065',
     'J:1x03_hdr': 'C49257',
+    # --- Rev B: bring-up headers, current sense, 24 V terminal (LCSC stock checked 2026-10-31)
+    'J:TB2_508': 'C8465', 'J:SHUNT': 'C100114', 'U:INA219': 'C87469',
+    'R:5m2512': 'C393074', 'R:10m1206': 'C188070',
     # --- passives (basic unless noted)
     'C:100nF': 'C14663', 'C:100nF50': 'C14663', 'C:1uF': 'C29936', 'C:1uF50': 'C91185', 'C:10uF': 'C15850',
     'C:4.7uF': 'C1779', 'C:22uF': 'C77091', 'C:2.2uF100': 'C153036', 'C:33pF': 'C1663', 'C:15pF': 'C1644',
@@ -27,6 +30,7 @@ LCSC = {
     'R:3.9k': 'C23018', 'R:7.5k': 'C23234', 'R:6.8k': 'C23212',
     'R:240': 'C114613', 'R:4.3k': 'C23159', 'R:53.6k': 'C2930115', 'R:31.6k': 'C25967', 'R:243k': 'C403098',
     'R:16.9k': 'C2933158',   # extended
+    'R:22k': 'C31850', 'R:470': 'C23179',
 }
 
 SPEC = {
@@ -35,6 +39,7 @@ SPEC = {
     'C:33pF': '50V C0G', 'C:15pF': '50V C0G', 'C:47pF': '50V C0G', 'C:4.7nF': '50V X7R',
     'C:100uF63': '63V electrolytic 10x10.5', 'C:470uF10': '10V electrolytic 6.3x7.7',
     'C:220uF10': '10V electrolytic 6.3x5.4', 'R:12k': '1%', 'R:0': 'jumper',
+    'R:5m2512': '5 mOhm 1% 3W 2512 shunt', 'R:10m1206': '10 mOhm 1% 1W 1206 shunt',
 }
 
 

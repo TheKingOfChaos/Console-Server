@@ -94,6 +94,10 @@ for i, (ref, mpn, fp) in enumerate((
            fields=flds('J:1x04_hdr' if i == 0 else 'J:1x04_skt', Note=mpn), rot=180)
 pw.text('J3 (header, right edge) / J4 (socket, left edge):\n'
         'daisy chain, mate board-to-board. Symmetric pinout:\nreversal maps 24 V to 24 V, GND to GND.', (20, 88), 1.27)
+pw.add('Connector:Screw_Terminal_01x02', (35, 110), 'J10', '24V IN', {'1': '+24V_RAW', '2': 'GND'},
+       fp='TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal',
+       fields=flds('J:TB2_508', Note='5.08 mm screw terminal, 18 A; same node as the chain connectors'))
+pw.text('J10: 24 V screw terminal (Rev B). Feeds +24V_RAW like J3/J4:\nwire one board, the chain carries the rest.', (50, 108), 1.27)
 flag(pw, '+24V_RAW', 100, 60)
 flag(pw, 'GND', 110, 60)
 # fuse, FET, gate clamp
@@ -119,53 +123,89 @@ pw.text('+5V BUCK (Raspberry Pi, 5 A)\nTPS54560B: 60 V, 5 A, Eco-mode pulse skip
         'Vout = 0.8 V x (1 + 53.6k/10k) = 5.09 V.\n'
         'COMPENSATION VALUES ARE A STARTING POINT: re-derive in TI WEBENCH for the final L/Cout.', (20, 125))
 pw.add('Regulator_Switching:TPS54560BDDA', (70, 175), 'U8', 'TPS54560BDDAR',
-       {'1': 'BOOT5', '2': '+24V', '3': None, '4': 'RT5', '5': 'FB5', '6': 'COMP5', '7': 'GND', '8': 'SW5', '9': 'GND'},
+       {'1': 'BOOT5', '2': '24V_BUCK5', '3': None, '4': 'RT5', '5': 'FB5', '6': 'COMP5', '7': 'GND', '8': 'SW5', '9': 'GND'},
        fp='Package_SO:Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm_ThermalVias', fields=flds('U:TPS54560B'), label_len=5.08)
 pw.text('EN left open: internal pull-up enables the part.', (40, 195), 1.27)
 r = Row(pw, 20, 215)
-r.C('2.2uF', '+24V', 'GND', key='C:2.2uF100', fp=FP['C1210'])
-r.C('2.2uF', '+24V', 'GND', key='C:2.2uF100', fp=FP['C1210'])
-r.C('100nF', '+24V', 'GND')
+r.C('2.2uF', '24V_BUCK5', 'GND', key='C:2.2uF100', fp=FP['C1210'])
+r.C('2.2uF', '24V_BUCK5', 'GND', key='C:2.2uF100', fp=FP['C1210'])
+r.C('100nF', '24V_BUCK5', 'GND')
 r.R('243k', 'RT5', 'GND')
 r.R('16.9k', 'COMP5', 'COMP5_RC')
 r.C('4.7nF', 'COMP5_RC', 'GND')
 r.C('47pF', 'COMP5', 'GND')
 r.C('100nF', 'BOOT5', 'SW5')
 r.gap()
-r.L('10uH', 'SW5', '+5V', 'L:SRP1265A', 'console_server:L_Bourns_SRP1265A', extra={'MPN': 'TMPC1265HP-100MG-D', 'Note': 'Isat 15.5 A, Irms 10 A (SRP1265A-100M equivalent)'})
+r.L('10uH', 'SW5', '+5V_BUCK', 'L:SRP1265A', 'console_server:L_Bourns_SRP1265A', extra={'MPN': 'TMPC1265HP-100MG-D', 'Note': 'Isat 15.5 A, Irms 10 A (SRP1265A-100M equivalent)'})
 pw.add('Device:D_Schottky', (r.x + 4, 215), 'D', 'B560C', {'1': 'SW5', '2': 'GND'}, rot=90, fp='Diode_SMD:D_SMC',
        fields=flds('D:B560C'))
 r.gap(2)
-r.R('53.6k', '+5V', 'FB5')
+r.R('53.6k', '+5V_BUCK', 'FB5')
 r.R('10k', 'FB5', 'GND')
 for _ in range(4):
-    r.C('22uF', '+5V', 'GND', key='C:22uF', fp=FP['C1206'])
+    r.C('22uF', '+5V_BUCK', 'GND', key='C:22uF', fp=FP['C1206'])
 flag(pw, '+5V', r.x + 5, 205)
 
 # 3.3 V buck, TPS54360B
 pw.text('+3.3V BUCK (4x FT4232H, hub, 8x MAX3232E: ~700 mA)\nTPS54360B: 60 V, 3.5 A, Eco-mode. fsw = 400 kHz.\n'
         'Vout = 0.8 V x (1 + 31.6k/10k) = 3.33 V.', (220, 125))
 pw.add('Regulator_Switching:TPS54360DDA', (270, 175), 'U9', 'TPS54360BDDAR',
-       {'1': 'BOOT3', '2': '+24V', '3': None, '4': 'RT3', '5': 'FB3', '6': 'COMP3', '7': 'GND', '8': 'SW3', '9': 'GND'},
+       {'1': 'BOOT3', '2': '24V_BUCK3', '3': None, '4': 'RT3', '5': 'FB3', '6': 'COMP3', '7': 'GND', '8': 'SW3', '9': 'GND'},
        fp='Package_SO:TI_SO-PowerPAD-8_ThermalVias', fields=flds('U:TPS54360B'), label_len=5.08)
 r = Row(pw, 220, 215)
-r.C('2.2uF', '+24V', 'GND', key='C:2.2uF100', fp=FP['C1210'])
-r.C('100nF', '+24V', 'GND')
+r.C('2.2uF', '24V_BUCK3', 'GND', key='C:2.2uF100', fp=FP['C1210'])
+r.C('100nF', '24V_BUCK3', 'GND')
 r.R('243k', 'RT3', 'GND')
 r.R('16.9k', 'COMP3', 'COMP3_RC')
 r.C('4.7nF', 'COMP3_RC', 'GND')
 r.C('47pF', 'COMP3', 'GND')
 r.C('100nF', 'BOOT3', 'SW3')
 r.gap()
-r.L('10uH', 'SW3', '+3.3V', 'L:SRP7028A', 'Inductor_SMD:L_Bourns_SRP7028A_7.3x6.6mm', extra={'MPN': 'SRP7028A-100M', 'Note': 'Isat 6 A, Irms 3.5 A'})
+r.L('10uH', 'SW3', '+3V3_BUCK', 'L:SRP7028A', 'Inductor_SMD:L_Bourns_SRP7028A_7.3x6.6mm', extra={'MPN': 'SRP7028A-100M', 'Note': 'Isat 6 A, Irms 3.5 A'})
 pw.add('Device:D_Schottky', (r.x + 4, 215), 'D', 'B360A', {'1': 'SW3', '2': 'GND'}, rot=90, fp='Diode_SMD:D_SMA',
        fields=flds('D:B360A'))
 r.gap(2)
-r.R('31.6k', '+3.3V', 'FB3')
+r.R('31.6k', '+3V3_BUCK', 'FB3')
 r.R('10k', 'FB3', 'GND')
 for _ in range(3):
-    r.C('22uF', '+3.3V', 'GND', key='C:22uF', fp=FP['C1206'])
+    r.C('22uF', '+3V3_BUCK', 'GND', key='C:22uF', fp=FP['C1206'])
 flag(pw, '+3.3V', r.x + 5, 205)
+
+# Rev B bring-up: each buck input through a 3-pin header (supply - section - GND)
+pw.text('BRING-UP HEADERS (Rev B)\n1 = supply, 2 = section, 3 = GND. Jumper 1-2 = normal.\n'
+        'Off = section unpowered; meter across 1-2 = current;\nbench supply on 2-3 = feed the section alone.\n'
+        'A jumper on 2-3 only grounds the dead section.', (118, 140), 1.27)
+for i, (ref, net) in enumerate((('J11', '24V_BUCK5'), ('J12', '24V_BUCK3'))):
+    pw.add('Connector_Generic:Conn_01x03', (130 + 35 * i, 185), ref, 'BUCK5_IN' if i == 0 else 'BUCK3_IN',
+           {'1': '+24V', '2': net, '3': 'GND'}, fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
+           fields=flds('J:1x03_hdr', Note='bring-up jumper, 1.2 A max'), rot=180)
+    flag(pw, net, 145 + 35 * i, 172)
+flag(pw, '+5V_BUCK', 140, 205)
+flag(pw, '+3V3_BUCK', 175, 205)
+
+# current sense: shunt between buck output and rail, INA219 on the MCU's private I2C bus
+pw.text('RAIL CURRENT SENSE (Rev B)\nINA219 on INA_SDA/INA_SCL (MCU bus, powered from +3V3_MCU).\n'
+        'U23 0x40: 5 mOhm on +5V (25 mV at 5 A). U24 0x41: 10 mOhm on +3.3V.\n'
+        'Buck feedback is taken BEFORE the shunt; Kelvin IN+/IN- from the shunt pads.', (318, 134), 1.27)
+r = Row(pw, 305, 160)
+r.R('5m', '+5V_BUCK', '+5V', key='R:5m2512', fp='Resistor_SMD:R_2512_6332Metric', extra={'Note': '+5V shunt'})
+r.R('10m', '+3V3_BUCK', '+3.3V', key='R:10m1206', fp='Resistor_SMD:R_1206_3216Metric', extra={'Note': '+3.3V shunt'})
+r.C('100nF', '+3V3_MCU', 'GND')
+r.C('100nF', '+3V3_MCU', 'GND')
+for i, (ref, hi, lo, a0) in enumerate((('U23', '+5V_BUCK', '+5V', 'GND'), ('U24', '+3V3_BUCK', '+3.3V', '+3V3_MCU'))):
+    pw.add('Sensor_Energy:INA219AxDCN', (318 + 45 * i, 184), ref, 'INA219AIDCNR',
+           {'1': hi, '2': lo, '3': 'GND', '4': '+3V3_MCU', '5': 'INA_SCL', '6': 'INA_SDA', '7': a0, '8': 'GND'},
+           fp='Package_TO_SOT_SMD:SOT-23-8', fields=flds('U:INA219'), label_len=5.08)
+
+# power-good LEDs, ~1 mA each
+pw.text('RAIL LEDs (Rev B), green, ~1 mA: on = rail present.', (100, 234), 1.27)
+r = Row(pw, 105, 250)
+for net, rv in (('+24V', '22k'), ('+5V', '2.2k'), ('+3.3V', '470'), ('+3V3_MCU', '470')):
+    led_a = 'LEDA_' + net.strip('+').replace('.', 'V').replace('_', '')
+    r.R(rv, net, led_a)
+    pw.add('Device:LED', (r.x - 3, 268), 'D', 'green', {'2': led_a, '1': 'GND'}, rot=90, fp=FP['LED'],
+           fields=flds('D:LED_G', Note=f'{net} present'))
+    r.gap(0.5)
 
 # MCU rail: LM317 off the protected 24 V
 pw.text('+3V3_MCU: independent LM317 off +24V, so the MCU outlives the rails it monitors.\n'
@@ -217,6 +257,10 @@ r.CP('470uF', 'PI_5V', 'GND', 'C:470uF10', 'Capacitor_SMD:CP_Elec_6.3x7.7')
 r.CP('220uF', 'PI_5V', 'GND', 'C:220uF10', 'Capacitor_SMD:CP_Elec_6.3x5.4')
 r.C('10uF', 'PI_5V', 'GND', key='C:10uF', fp=FP['C0805'])
 flag(pi, 'PI_5V', 360, 80)
+r = Row(pi, 370, 85)
+r.R('2.2k', 'PI_5V', 'LEDA_PI5V')
+pi.add('Device:LED', (r.x - 3, 105), 'D', 'green', {'2': 'LEDA_PI5V', '1': 'GND'}, rot=90, fp=FP['LED'],
+       fields=flds('D:LED_G', Note='Pi 5 V present'))
 
 # HAT ID EEPROM
 pi.text('HAT ID EEPROM on ID_SD / ID_SC (pins 27/28). Bridge JP to GND to write.', (170, 125))
@@ -287,24 +331,24 @@ hub_nets = {
     '1': 'USB_DN1_DP', '2': 'USB_DN1_DM', '3': 'USB_DN2_DP', '4': 'USB_DN2_DM', '6': 'USB_DN3_DP', '7': 'USB_DN3_DM',
     '8': 'USB_DN4_DP', '9': 'USB_DN4_DM', '5': 'VDDA33', '10': 'VDDA33', '29': 'VDDA33', '36': 'VDDA33',
     '11': 'GND', '12': None, '16': None, '18': None, '20': None, '13': 'OCS_N', '17': 'OCS_N', '19': 'OCS_N',
-    '21': 'OCS_N', '14': 'CRFILT', '15': '+3.3V', '23': '+3.3V', '22': 'HUB_SDA', '24': 'HUB_SCL', '25': 'CFG_SEL1',
+    '21': 'OCS_N', '14': 'CRFILT', '15': '+3V3_HUB', '23': '+3V3_HUB', '22': 'HUB_SDA', '24': 'HUB_SCL', '25': 'CFG_SEL1',
     '26': 'HUB_MR_N', '27': 'VBUS_DET', '28': 'LOCAL_PWR', '30': 'USB_UP_DM', '31': 'USB_UP_DP', '32': 'HUB_XO',
     '33': 'HUB_XI', '34': 'PLLFILT', '35': 'RBIAS', '37': 'GND'}
 hub.add('Interface_USB:USB2514B_Bi', (215, 130), 'U5', 'USB2514BI-AEZG-TR', hub_nets, fields=flds('U:USB2514B'),
         label_len=5.08)
 hub.add('Device:Crystal_GND24', (300, 100), 'X1', '24MHz', {'1': 'HUB_XI', '3': 'HUB_XO', '2': 'GND', '4': 'GND'},
-        fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm', fields=flds('X:24M', Note='X322524MOB4SI, CL 12 pF'))
+        fp='Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm', fields=flds('X:24M', Note='XL2EL89COI-111YLC-24M, CL 12 pF'))
 r = Row(hub, 290, 125)
 r.C('15pF', 'HUB_XI', 'GND', ref='C62', extra={'Note': 'C0G, matched to 12 pF CL'})
 r.C('15pF', 'HUB_XO', 'GND', ref='C63', extra={'Note': 'C0G, matched to 12 pF CL'})
 r.R('1M', 'HUB_XI', 'HUB_XO', ref='R43', dnp=True, extra={'Note': 'DNP - feedback is internal'})
 r = Row(hub, 150, 200)
-r.R('10k', '+3.3V', 'HUB_SCL', ref='R28', extra={'Note': 'SCL pull-up AND CFG_SEL0 strap'})
-r.R('10k', '+3.3V', 'CFG_SEL1')
-r.R('10k', '+3.3V', 'HUB_SDA')
-r.R('10k', '+3.3V', 'OCS_N')
-r.R('10k', '+3.3V', 'LOCAL_PWR')
-r.R('10k', '+3.3V', 'HUB_MR_N')
+r.R('10k', '+3V3_HUB', 'HUB_SCL', ref='R28', extra={'Note': 'SCL pull-up AND CFG_SEL0 strap'})
+r.R('10k', '+3V3_HUB', 'CFG_SEL1')
+r.R('10k', '+3V3_HUB', 'HUB_SDA')
+r.R('10k', '+3V3_HUB', 'OCS_N')
+r.R('10k', '+3V3_HUB', 'LOCAL_PWR')
+r.R('10k', '+3V3_HUB', 'HUB_MR_N')
 r.C('100nF', 'HUB_MR_N', 'GND')
 r.R('12k', 'RBIAS', 'GND', key='R:12k')
 r.C('1uF', 'CRFILT', 'GND', key='C:1uF')
@@ -312,20 +356,30 @@ r.C('100nF', 'CRFILT', 'GND')
 r.C('1uF', 'PLLFILT', 'GND', key='C:1uF')
 r.C('100nF', 'PLLFILT', 'GND')
 r = Row(hub, 150, 245)
-r.FB('+3.3V', 'VDDA33')
-r.C('4.7uF', '+3.3V', 'GND', key='C:4.7uF', fp=FP['C0805'])
+r.FB('+3V3_HUB', 'VDDA33')
+r.C('4.7uF', '+3V3_HUB', 'GND', key='C:4.7uF', fp=FP['C0805'])
 r.C('4.7uF', 'VDDA33', 'GND', key='C:4.7uF', fp=FP['C0805'])
 for _ in range(4):
     r.C('100nF', 'VDDA33', 'GND')
-r.C('100nF', '+3.3V', 'GND')
-r.C('100nF', '+3.3V', 'GND')
+r.C('100nF', '+3V3_HUB', 'GND')
+r.C('100nF', '+3V3_HUB', 'GND')
 flag(hub, 'VDDA33', r.x + 5, 235)
 hub.text('Hub config EEPROM - private bus. Never on the inter-board harness:\n'
          'three 24LC02Bs at 0xA0 and three hub masters would collide.', (300, 160))
 hub.add('Memory_EEPROM:24LC02', (330, 190), 'U20', '24LC02B-I/SN',
-        {'1': 'GND', '2': 'GND', '3': 'GND', '4': 'GND', '5': 'HUB_SDA', '6': 'HUB_SCL', '7': 'GND', '8': '+3.3V'},
+        {'1': 'GND', '2': 'GND', '3': 'GND', '4': 'GND', '5': 'HUB_SDA', '6': 'HUB_SCL', '7': 'GND', '8': '+3V3_HUB'},
         fp='Package_SO:SOIC-8_3.9x4.9mm_P1.27mm', fields=flds('U:24LC02B'))
-Row(hub, 360, 185).C('100nF', '+3.3V', 'GND')
+Row(hub, 360, 185).C('100nF', '+3V3_HUB', 'GND')
+hub.text('HUB BRING-UP HEADER (Rev B): 1 = +3.3V, 2 = +3V3_HUB, 3 = GND. Jumper 1-2 = normal.\n'
+         'With the hub unpowered the MCU must keep\nHUB_SDA/SCL/MR_N tri-stated (no back-powering).', (300, 212), 1.27)
+hub.add('Connector_Generic:Conn_01x03', (310, 240), 'J13', 'HUB_3V3', {'1': '+3.3V', '2': '+3V3_HUB', '3': 'GND'},
+        fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
+        fields=flds('J:1x03_hdr', Note='bring-up jumper'), rot=180)
+flag(hub, '+3V3_HUB', 325, 228)
+r = Row(hub, 345, 232)
+r.R('470', '+3V3_HUB', 'LEDA_HUB')
+hub.add('Device:LED', (r.x - 3, 248), 'D', 'green', {'2': 'LEDA_HUB', '1': 'GND'}, rot=90, fp=FP['LED'],
+        fields=flds('D:LED_G', Note='hub section powered'))
 
 # =====================================================================
 # FT4232H cluster (instantiated 4x): FT4232H + crystal + EEPROM + 2x MAX3232E
@@ -341,8 +395,8 @@ ft_nets = {str(n): None for n in range(1, 65)}
 ft_nets.update({'2': 'OSCI', '3': 'OSCO', '4': 'VPHY', '6': 'REF', '7': 'USB_DM', '8': 'USB_DP', '9': 'VPLL',
                 '12': 'VCORE', '37': 'VCORE', '64': 'VCORE', '49': 'VCORE', '13': 'GND', '14': 'FTDI_RST_N',
                 '16': 'TXD_A', '17': 'RXD_A', '26': 'TXD_B', '27': 'RXD_B', '38': 'TXD_C', '39': 'RXD_C',
-                '48': 'TXD_D', '52': 'RXD_D', '20': '+3.3V', '31': '+3.3V', '42': '+3.3V', '56': '+3.3V',
-                '50': '+3.3V', '61': 'EEDATA', '62': 'EECLK', '63': 'EECS', '10': 'GND'})
+                '48': 'TXD_D', '52': 'RXD_D', '20': 'VCC3', '31': 'VCC3', '42': 'VCC3', '56': 'VCC3',
+                '50': 'VCC3', '61': 'EEDATA', '62': 'EECLK', '63': 'EECS', '10': 'GND'})
 for g in (1, 5, 11, 15, 25, 35, 47, 51):
     ft_nets[str(g)] = 'GND'
 ft.add('Interface_USB:FT4232H', (120, 140), lambda i: f'U{i + 1}', 'FT4232HL', ft_nets,
@@ -354,27 +408,27 @@ r.C('33pF', 'OSCI', 'GND', extra={'Note': 'C0G'})
 r.C('33pF', 'OSCO', 'GND', extra={'Note': 'C0G'})
 r.R('12k', 'REF', 'GND', key='R:12k')
 ft.add('console_server:93LC46B', (60, 270), lambda i: f'U{31 + i}', '93LC46BT-I/SN',
-       {'1': 'EECS', '2': 'EECLK', '3': 'EEDATA', '4': 'EE_DO', '5': 'GND', '8': '+3.3V'},
+       {'1': 'EECS', '2': 'EECLK', '3': 'EEDATA', '4': 'EE_DO', '5': 'GND', '8': 'VCC3'},
        fields=flds('U:93LC46B'), label_len=5.08)
 r = Row(ft, 100, 262)
 r.R('2.2k', 'EE_DO', 'EEDATA')
-r.R('10k', '+3.3V', 'EE_DO')
-r.C('100nF', '+3.3V', 'GND')
+r.R('10k', 'VCC3', 'EE_DO')
+r.C('100nF', 'VCC3', 'GND')
 # FT4232H supply decoupling
 r = Row(ft, 150, 225)
-r.C('100nF', '+3.3V', 'GND', extra={'Note': 'VREGIN'})
+r.C('100nF', 'VCC3', 'GND', extra={'Note': 'VREGIN'})
 r.C('4.7uF', 'VCORE', 'GND', key='C:4.7uF', fp=FP['C0805'], extra={'Note': 'VREGOUT: LDO compensation, min 3.3 uF'})
 for _ in range(3):
     r.C('100nF', 'VCORE', 'GND', extra={'Note': 'VCORE pin'})
 for _ in range(4):
-    r.C('100nF', '+3.3V', 'GND', extra={'Note': 'VCCIO pin'})
-r.C('10uF', '+3.3V', 'GND', key='C:10uF', fp=FP['C0805'], extra={'Note': 'local bulk'})
+    r.C('100nF', 'VCC3', 'GND', extra={'Note': 'VCCIO pin'})
+r.C('10uF', 'VCC3', 'GND', key='C:10uF', fp=FP['C0805'], extra={'Note': 'local bulk'})
 r = Row(ft, 150, 262)
-r.FB('+3.3V', 'VPLL')
+r.FB('VCC3', 'VPLL')
 r.C('100nF', 'VPLL', 'GND')
 r.C('1uF', 'VPLL', 'GND', key='C:1uF')
 r.gap()
-r.FB('+3.3V', 'VPHY')
+r.FB('VCC3', 'VPHY')
 r.C('100nF', 'VPHY', 'GND')
 r.C('1uF', 'VPHY', 'GND', key='C:1uF')
 flag(ft, 'VPLL', 260, 255)
@@ -387,14 +441,24 @@ for k, (chs, y) in enumerate(((('A', 'B'), 85), (('C', 'D'), 185))):
     ft.add('Interface_UART:MAX3232', (300, y), (lambda kk: (lambda i: f'U{10 + 2 * i + kk}'))(k), 'MAX3232EIDR',
            {'1': f'C1P_{a}{b}', '3': f'C1N_{a}{b}', '4': f'C2P_{a}{b}', '5': f'C2N_{a}{b}', '2': f'VP_{a}{b}',
             '6': f'VN_{a}{b}', '11': f'TXD_{a}', '12': f'RXD_{a}', '10': f'TXD_{b}', '9': f'RXD_{b}',
-            '14': f'TX232_{a}', '13': f'RX232_{a}', '7': f'TX232_{b}', '8': f'RX232_{b}', '15': 'GND', '16': '+3.3V'},
+            '14': f'TX232_{a}', '13': f'RX232_{a}', '7': f'TX232_{b}', '8': f'RX232_{b}', '15': 'GND', '16': 'VCC3'},
            fp='Package_SO:SOIC-16_3.9x9.9mm_P1.27mm', fields=flds('U:MAX3232E'), label_len=5.08)
     r = Row(ft, 350, y - 25)
     r.C('100nF', f'C1P_{a}{b}', f'C1N_{a}{b}')
     r.C('100nF', f'C2P_{a}{b}', f'C2N_{a}{b}')
     r.C('100nF', f'VP_{a}{b}', 'GND')
     r.C('100nF', 'GND', f'VN_{a}{b}')
-    r.C('100nF', '+3.3V', 'GND')
+    r.C('100nF', 'VCC3', 'GND')
+ft.text('CLUSTER BRING-UP HEADER (Rev B): 1 = +3.3V,\n2 = VCC3 (this cluster), 3 = GND. Jumper 1-2 = normal.\n'
+        'Pull it to leave this cluster dark;\nmeter across 1-2 for its current; bench supply on 2-3.', (325, 210), 1.27)
+ft.add('Connector_Generic:Conn_01x03', (340, 240), lambda i: f'J{14 + i}', 'FT_3V3', {'1': '+3.3V', '2': 'VCC3', '3': 'GND'},
+       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical',
+       fields=flds('J:1x03_hdr', Note='bring-up jumper'), rot=180)
+flag(ft, 'VCC3', 358, 228)
+r = Row(ft, 375, 232)
+r.R('470', 'VCC3', 'LEDA_FT')
+ft.add('Device:LED', (r.x - 3, 248), 'D', 'green', {'2': 'LEDA_FT', '1': 'GND'}, rot=90, fp=FP['LED'],
+       fields=flds('D:LED_G', Note='cluster powered'))
 ft.hier = {'USB_DP': 'bidirectional', 'USB_DM': 'bidirectional', 'FTDI_RST_N': 'input'}
 for ch in 'ABCD':
     ft.hier[f'TX232_{ch}'] = 'output'
@@ -436,7 +500,7 @@ mc.text('ATtiny3216 at 10 MHz (internal 20 MHz / 2; 20 MHz needs 4.5 V). I2C tar
         'ALERT is open-drain in firmware; pull-up to PI3.3 so it exists only with a Pi (no back-power).\n'
         'Do not fuse PA0 to RESET: recovering UPDI needs a 12 V pulse.', (20, 22))
 mc.add('MCU_Microchip_ATtiny:ATtiny3216-S', (90, 130), 'U6', 'ATtiny3216-SN',
-       {'1': '+3V3_MCU', '2': 'SENSE_24V', '3': 'SENSE_5V', '4': 'SENSE_3V3', '5': 'MCU_PA7', '6': 'ID1', '7': 'ID0',
+       {'1': '+3V3_MCU', '2': 'SENSE_24V', '3': 'INA_SDA', '4': 'INA_SCL', '5': 'MCU_PA7', '6': 'ID1', '7': 'ID0',
         '8': 'SPARE2', '9': 'SPARE1', '10': 'PI_SDA', '11': 'PI_SCL', '12': 'HUB_MR_N', '13': 'FTDI_RST_N',
         '14': 'HUB_SDA', '15': 'HUB_SCL', '16': 'UPDI', '17': 'LED_STATUS', '18': 'ALERT', '19': 'RESET_REQ',
         '20': 'GND'},
@@ -450,7 +514,8 @@ mc.add('Connector_Generic:Conn_01x03', (40, 75), 'J7', 'UPDI', {'1': 'UPDI', '2'
        fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03'), rot=180)
 mc.text('UPDI: GND in the centre. A reversed plug swaps\n+3V3 and UPDI but never the reference.', (20, 85), 1.27)
 
-mc.text('RAIL MONITORING: ~2.0 V at nominal vs internal 2.5 V ref. 100 nF at each tap.\n'
+mc.text('RAIL MONITORING: +24V on the ADC (~2.0 V at nominal vs internal 2.5 V ref). +5V and +3.3V voltage AND\n'
+        'current come from the two INA219s (power sheet) on PA5/PA6 = INA_SDA/INA_SCL, bit-banged, own pull-ups.\n'
         'Senses protected +24V, not +24V_RAW. JP2 selects 100 nF (default) or 22 uF on the 24 V tap:\n'
         'SHIP ON 100 nF - 22 uF x 3.9k = 86 ms averages away the dip the monitor exists to catch.', (170, 22))
 r = Row(mc, 175, 55)
@@ -459,13 +524,8 @@ r.R('4.3k', 'SENSE_24V', 'GND')
 r.C('100nF', 'TAP24_A', 'GND')
 r.C('22uF', 'TAP24_B', 'GND', key='C:22uF', fp=FP['C1206'])
 r.gap()
-r.R('7.5k', '+5V', 'SENSE_5V')
-r.R('5.1k', 'SENSE_5V', 'GND')
-r.C('100nF', 'SENSE_5V', 'GND')
-r.gap()
-r.R('6.8k', '+3.3V', 'SENSE_3V3')
-r.R('10k', 'SENSE_3V3', 'GND')
-r.C('100nF', 'SENSE_3V3', 'GND')
+r.R('4.7k', '+3V3_MCU', 'INA_SDA')
+r.R('4.7k', '+3V3_MCU', 'INA_SCL')
 mc.add('Jumper:SolderJumper_3_Bridged12', (200, 85), 'JP2', '100n/22u', {'1': 'TAP24_A', '2': 'SENSE_24V', '3': 'TAP24_B'},
        fp='Jumper:SolderJumper-3_P1.3mm_Bridged12_RoundedPad1.0x1.5mm', in_bom=False)
 
@@ -486,6 +546,10 @@ r.R('1k', 'LED_STATUS', 'LED_A')
 mc.add('Device:LED', (r.x + 5, 150), 'D', 'green', {'2': 'LED_A', '1': 'GND'}, rot=90, fp=FP['LED'],
        fields=flds('D:LED_G', Note='heartbeat = healthy; solid or dark = hung'))
 
+mc.text('MCU UART (Rev B): J19 = TX (PB2) - GND - RX (PB3), USART0 default pins.\n'
+        'Shared with SPARE1/SPARE2 on the link: debug one board at a time.', (20, 208), 1.27)
+mc.add('Connector_Generic:Conn_01x03', (40, 228), 'J19', 'MCU_UART', {'1': 'SPARE1', '2': 'GND', '3': 'SPARE2'},
+       fp='Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical', fields=flds('J:1x03_hdr'), rot=180)
 mc.text('INTER-BOARD SIGNAL LINK, 9-way (power is a separate 4-way: different pin counts cannot be swapped).\n'
         'J8 header (right edge) mates J9 socket (left edge) of the next board directly - no cable.\n'
         'The invariant is physical position, not pin number. SPARE1/SPARE2 sit on USART0 (PB2/PB3) for an\n'
@@ -519,8 +583,9 @@ test_points(pi, 25, 270, [('PI_5V', True), ('PI3.3', True), ('PI_SDA', False), (
                           ('PIRXD', False)], 'TEST POINTS - Pi power, I2C, console UART (TTL side)')
 test_points(hub, 25, 275, [('VBUS_UP', True), ('HUB_MR_N', False), ('HUB_SDA', False), ('HUB_SCL', False),
                            ('GND', True)], 'TEST POINTS - hub')
-test_points(ft, 135, 247, [('VCORE', True)], 'TP: 1.8 V core')
-test_points(mc, 25, 268, [('ALERT', False), ('RESET_REQ', False), ('FTDI_RST_N', False)], 'TEST POINTS - link and resets')
+test_points(ft, 135, 247, [('VCORE', True), ('VCC3', True), ('GND', True)], 'TP: 1.8 V core, cluster 3.3 V, GND')
+test_points(mc, 25, 268, [('ALERT', False), ('RESET_REQ', False), ('FTDI_RST_N', False), ('INA_SDA', False),
+                          ('INA_SCL', False)], 'TEST POINTS - link, resets, INA bus')
 test_points(pt, 160, 268, [('GND', True)], 'TP: scope ground near the jacks')
 
 # =====================================================================
@@ -531,7 +596,9 @@ P.root = root
 root.text('USB CONSOLE SERVER - 16 RS-232 console ports per board, three identical boards -> 48 ports on one Pi.\n'
           'Board identity is two solder straps on the MCU sheet; nothing else differs between builds.\n'
           'Signal: USB-C -> USB2514B hub -> 4x FT4232H -> 8x MAX3232E -> 16x RJ45 (Cisco console, 3-wire).\n'
-          'Power: 24 V cabinet bus -> fuse / reverse-block / TVS -> 5 V (Pi), 3.3 V (logic), LM317 3.3 V (MCU).', (20, 22))
+          'Power: 24 V cabinet bus -> fuse / reverse-block / TVS -> 5 V (Pi), 3.3 V (logic), LM317 3.3 V (MCU).\n'
+          'REV B: 24 V screw terminal; every section (5 V buck, 3.3 V buck, hub, FT1-FT4) behind a 3-pin bring-up\n'
+          'header with a power LED; INA219 current/voltage sense on +5V and +3.3V; MCU UART header.', (20, 22))
 mh = [('H1', 'MountingSlot_3.2x6mm'), ('H2', 'MountingSlot_3.2x6mm'), ('H3', 'MountingSlot_3.2x6mm'),
       ('H4', 'MountingSlot_3.2x6mm'), ('H5', 'Pi'), ('H6', 'Pi'), ('H7', 'Pi'), ('H8', 'Pi')]
 for i, (ref, kind) in enumerate(mh):

@@ -7,7 +7,7 @@
 	(property "Reference" "REF**"
 		(at 0 -4.5 0)
 		(layer "F.SilkS")
-		(uuid "c0526fee-a060-4ce6-bdc3-e7def9068062")
+		(uuid "a9b3bd54-dc09-461c-b612-fe598fbe7f82")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -17,7 +17,7 @@
 	(property "Value" "MountingSlot_3.2x6mm"
 		(at 0 4.5 0)
 		(layer "F.Fab")
-		(uuid "9fe59436-af86-45c9-8b0c-107c3dd16be6")
+		(uuid "cbefd178-6dc2-49da-9f55-999bd34a4dff")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -28,7 +28,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "99489e89-639b-4151-b712-e90c0e73d6d6")
+		(uuid "464046e0-031b-44c8-97d2-6f1309fe4a5c")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -39,7 +39,7 @@
 		(at 0 0 0)
 		(layer "F.Fab")
 		(hide yes)
-		(uuid "aa612491-128a-4dcc-ba7d-7ce18ed4019a")
+		(uuid "f40fac6c-4ce6-49cb-87f1-b09cbe2e5930")
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -57,7 +57,7 @@
 		)
 		(fill no)
 		(layer "Cmts.User")
-		(uuid "8a4ccac4-18db-4aeb-ba58-ae6201028d5c")
+		(uuid "2a081487-ca01-4892-bcfc-edbeb15da441")
 	)
 	(fp_rect
 		(start -5 -3.3)
@@ -68,7 +68,7 @@
 		)
 		(fill no)
 		(layer "F.CrtYd")
-		(uuid "3a614dec-dfa7-42a5-aa68-19e8ef11b5fc")
+		(uuid "810e449e-b13d-4521-a897-56571b8efd5b")
 	)
 	(pad "" np_thru_hole oval
 		(at 0 0)
@@ -76,7 +76,7 @@
 		(drill oval 6 3.2)
 		(layers "*.Cu" "*.Mask")
 		(thermal_bridge_angle 45)
-		(uuid "cbb4176f-454b-41c3-a475-6a4d539ba1a6")
+		(uuid "cb4ce015-e114-40a1-95af-efefad12e391")
 	)
 	(embedded_fonts no)
 )
