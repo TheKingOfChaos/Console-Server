@@ -1,6 +1,7 @@
 """JLCPCB fabrication + assembly package.
 
-    python3 tools/jlc_export.py
+    python3 tools/jlc_export.py          # SMD assembled, through-hole parts on the hand-solder list
+    python3 tools/jlc_export.py --full   # JLCPCB also fits the through-hole parts (writes *_full_* files)
 
 Writes jlcpcb/:
   usb-console-server_gerbers.zip   Gerbers + Excellon drill files (upload as the PCB)
@@ -11,6 +12,7 @@ Fields (value, LCSC number, DNP, exclude-from-BOM) come from the schematic; posi
 Parts left out of assembly: DNP, excluded from BOM (test points, mounting holes), and HAND_SOLDER.
 """
 import csv
+import sys
 import os
 import subprocess
 import tempfile
@@ -66,6 +68,9 @@ def schematic_parts(td):
 
 
 def main():
+    full = '--full' in sys.argv
+    hand = set() if full else HAND_SOLDER
+    tag = '_full' if full else ''
     os.makedirs(OUT, exist_ok=True)
     with tempfile.TemporaryDirectory() as td:
         files = gerbers(td)
@@ -79,7 +84,7 @@ def main():
     for p in placed:
         ref = p['Ref']
         s = parts.get(ref)
-        if s is None or s['DNP'].strip() or s['EXCL'].strip() or ref in HAND_SOLDER:
+        if s is None or s['DNP'].strip() or s['EXCL'].strip() or ref in hand:
             skipped.append(ref)
             continue
         if not s['LCSC'].strip():
@@ -97,13 +102,13 @@ def main():
         i = len(r.rstrip('0123456789'))
         return (r[:i], int(r[i:] or 0))
 
-    with open(os.path.join(OUT, NAME + '_bom_jlc.csv'), 'w', newline='') as f:
+    with open(os.path.join(OUT, NAME + tag + '_bom_jlc.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['Comment', 'Designator', 'Footprint', 'LCSC Part #'])
         for (lcsc, val, fp), refs in sorted(groups.items(), key=lambda kv: refkey(min(kv[1], key=refkey))):
             w.writerow([val, ','.join(sorted(refs, key=refkey)), fp, lcsc])
 
-    with open(os.path.join(OUT, NAME + '_cpl_jlc.csv'), 'w', newline='') as f:
+    with open(os.path.join(OUT, NAME + tag + '_cpl_jlc.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['Designator', 'Mid X', 'Mid Y', 'Layer', 'Rotation'])
         for ref in sorted(fitted, key=refkey):
@@ -113,14 +118,14 @@ def main():
 
     # hand-solder list: the through-hole parts left out above, plus loose parts
     hs = {}
-    for ref in sorted(HAND_SOLDER, key=refkey):
+    for ref in sorted(hand, key=refkey):
         sp = parts.get(ref)
         if sp is None:
             continue
         e = hs.setdefault(sp['LCSC'].strip() or '-', {'refs': [], 'value': sp['Value'],
                                                      'fp': sp['Footprint'].split(':')[-1]})
         e['refs'].append(ref)
-    with open(os.path.join(OUT, NAME + '_hand_solder.csv'), 'w', newline='') as f:
+    with open(os.path.join(OUT, NAME + tag + ('_loose_parts.csv' if full else '_hand_solder.csv')), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['LCSC Part Number', 'Qty per board', 'Value', 'Footprint', 'Designators'])
         for lc, e in hs.items():
