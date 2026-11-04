@@ -4790,7 +4790,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C12065"
+		(property "LCSC" "C965805"
 			(at 287.02 149.86 90)
 			(hide yes)
 			(show_name no)
@@ -7941,7 +7941,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Value" "ATtiny3216-SN"
+		(property "Value" "ATtiny3216-SF"
 			(at 92.71 151.13 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7985,7 +7985,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C609661"
+		(property "LCSC" "C1340355"
 			(at 90.17 129.54 0)
 			(hide yes)
 			(show_name no)

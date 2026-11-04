@@ -6,17 +6,17 @@ LCSC = {
     # --- from the design record
     'F:0468002': 'C187611', 'Q:IRFR5305': 'C2624', 'D:BZT52C15': 'C668893', 'D:SMAJ26A': 'C148225',
     'U:LM317': 'C5296732', 'X:24M': 'C5444545', 'U:FT4232HL': 'C56742', 'X:12M': 'C9002', 'U:93LC46B': 'C16253',
-    'U:MAX3232E': 'C193666', 'U:SP3232': 'C9378', 'J:RJ45x16': 'C46261623', 'U:LM74700': 'C2653623',
+    'U:MAX3232E': 'C193666', 'U:SP3232': 'C9378', 'J:RJ45x16': 'C46261623', 'U:LM74700': 'C2941042',
     'Q:HYG032': 'C431195', 'D:SMAJ6.0A': 'C223993',
     # --- ICs / discretes confirmed by search
     'U:USB2514B': 'C58940', 'U:24LC02B': 'C1348870', 'U:24LC32A': 'C511262', 'U:PRTR5V0U2F': 'C478118',
-    'U:ATtiny3216': 'C609661', 'FB:BLM18KG601SN1D': 'C85833', 'U:TPS54560B': 'C1850354', 'U:TPS54360B': 'C524806',
+    'U:ATtiny3216': 'C1340355', 'FB:BLM18KG601SN1D': 'C85833', 'U:TPS54560B': 'C1850354', 'U:TPS54360B': 'C524806',
     'D:B560C': 'C85100', 'D:B360A': 'C94193', 'J:USBC': 'C165948',
     'L:SRP1265A': 'C305223', 'L:SRP7028A': 'C2687402',
     'C:100uF63': 'C51953411', 'C:470uF10': 'C335982', 'C:220uF10': 'C72494',
     'J:2x20_skt': 'C2977589', 'J:1x09_hdr': 'C492417', 'J:1x09_skt': 'C2897391',
     'J:1x04_hdr': 'C492412', 'J:1x04_skt': 'C2897386',
-    'D:LED_G': 'C12065',
+    'D:LED_G': 'C965805',
     'J:1x03_hdr': 'C49257',
     # --- Rev B: bring-up headers, current sense, 24 V terminal (LCSC stock checked 2026-10-31)
     'J:TB2_508': 'C8465', 'J:SHUNT': 'C100114', 'U:INA219': 'C87469',

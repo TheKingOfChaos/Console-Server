@@ -246,7 +246,7 @@ pi.text('IDEAL DIODE: LM74700-Q1 + AON7524 (30 V, 3.3 mOhm) blocks back-feed fro
         'BRING-UP: 3.3 mOhm is below TI\'s 8-20 mOhm window - scope the gate with the Pi idling for hunting.', (170, 22))
 pi.add('console_server:HYG032N03LR1C1', (230, 60), 'Q1', 'AON7524', {'1': '+5V', '4': 'Q1_GATE', '5': 'PI_5V'},
        rot=270, fields=flds('Q:HYG032'))
-pi.add('Power_Management:LM74700', (230, 90), 'U19', 'LM74700QDBVTQ1',
+pi.add('Power_Management:LM74700', (230, 90), 'U19', 'LM74700QDBVRQ1',
        {'1': 'LM_VCAP', '2': 'GND', '3': '+5V', '4': 'PI_5V', '5': 'Q1_GATE', '6': '+5V'}, fields=flds('U:LM74700'))
 r = Row(pi, 260, 85)
 r.C('100nF', 'LM_VCAP', '+5V', key='C:100nF50', ref='C24', extra={'Note': 'VCAP to ANODE, >=25 V'})
@@ -499,7 +499,7 @@ mc.text('ATtiny3216 at 10 MHz (internal 20 MHz / 2; 20 MHz needs 4.5 V). I2C tar
         'Tri-state PC2/PC3 (hub EEPROM bus) whenever +3.3V is down - the MCU outlives it by design.\n'
         'ALERT is open-drain in firmware; pull-up to PI3.3 so it exists only with a Pi (no back-power).\n'
         'Do not fuse PA0 to RESET: recovering UPDI needs a 12 V pulse.', (20, 22))
-mc.add('MCU_Microchip_ATtiny:ATtiny3216-S', (90, 130), 'U6', 'ATtiny3216-SN',
+mc.add('MCU_Microchip_ATtiny:ATtiny3216-S', (90, 130), 'U6', 'ATtiny3216-SF',
        {'1': '+3V3_MCU', '2': 'SENSE_24V', '3': 'INA_SDA', '4': 'INA_SCL', '5': 'MCU_PA7', '6': 'ID1', '7': 'ID0',
         '8': 'SPARE2', '9': 'SPARE1', '10': 'PI_SDA', '11': 'PI_SCL', '12': 'HUB_MR_N', '13': 'FTDI_RST_N',
         '14': 'HUB_SDA', '15': 'HUB_SCL', '16': 'UPDI', '17': 'LED_STATUS', '18': 'ALERT', '19': 'RESET_REQ',
